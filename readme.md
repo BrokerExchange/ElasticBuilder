@@ -62,3 +62,11 @@ $filter = [
 
 $this->addFilter($filter);
 ```
+
+Example of using a Facade
+
+```php
+$query = Boolean::must(['term'=>['category_id'=>1]])
+    ->filter(['range' => ['published_at' => ['lte' => Carbon::now()->toIso8601String()]]])
+    ->get();
+```
