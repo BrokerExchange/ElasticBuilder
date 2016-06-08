@@ -82,7 +82,7 @@ abstract class Query
     /**
      * @param $agg
      */
-    public function addAggregation($agg)
+    public function aggregate($agg)
     {
         $this->aggregations = $agg;
     }
@@ -93,5 +93,10 @@ abstract class Query
     public function setSort($sort)
     {
         $this->sort = $sort;
+    }
+    
+    public function toJson()
+    {
+        return json_encode($this->get());
     }
 }

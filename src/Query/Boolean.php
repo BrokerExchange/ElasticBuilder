@@ -12,22 +12,8 @@ namespace ElasticBuilder\Query;
  * Class ElasticBoolQuery
  * @package App
  */
-abstract class Boolean extends Query
+class Boolean extends Query
 {
-    /**
-     * @var
-     */
-    protected $shoulds; //the shoulds portion of the bool query
-
-    /**
-     * @var
-     */
-    protected $musts; //the musts portion of the bool query
-
-    /**
-     * @var
-     */
-    protected $filters; //the filters section of the bool query
 
     /**
      * ElasticBoolQuery constructor.
@@ -39,26 +25,32 @@ abstract class Boolean extends Query
 
     /**
      * @param $query
+     * @return $this
      */
-    public function addMust($query)
+    public function must($query)
     {
         $this->query['bool']['must'][] = $query;
+        return $this;
     }
 
     /**
      * @param $filter
+     * @return $this
      */
-    public function addFilter($filter)
+    public function filter($filter)
     {
         $this->query['bool']['filter'][] = $filter;
+        return $this;
     }
 
     /**
      * @param $query
+     * @return $this
      */
-    public function addShould($query)
+    public function should($query)
     {
         $this->query['bool']['should'][] = $query;
+        return $this;
     }
 
 }

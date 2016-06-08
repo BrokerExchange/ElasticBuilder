@@ -30,7 +30,7 @@ class DisMax extends Query
     /**
      * @param $query
      */
-    public function addQuery($query)
+    public function query($query)
     {
         $this->query['dis_max']['query'][] = $query;
     }
