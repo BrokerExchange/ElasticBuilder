@@ -10,6 +10,19 @@ ElasticBuilder is a series of Abstract classes you can use to map your query inp
 
 ## Examples
 
+**Extend Abstract Class**
+
+First you simply extend one of the abstract query classes ... in this case Boolean
+
+```php
+use ElasticBuilder\Query\Boolean;
+
+class ArticleQuery extends Boolean
+{
+ //do stuff
+}
+```
+
 **Add Clause**
 
 Here is how you go about adding a clause to a query (in this case must clause to bool query).
