@@ -1,0 +1,18 @@
+{
+  "name": "ben/elasticbuilder",
+  "description": "Query DSL Builder for Elasticsearch queries.",
+  "license": "Broker Exchange Network",
+  "authors": [
+    {
+      "name": "Brian Mix",
+      "email": "brian@brokerbin.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {},
+  "autoload": {
+    "psr-4": {
+      "ElasticBuilder\\": "src/"
+    }
+  }
+}
