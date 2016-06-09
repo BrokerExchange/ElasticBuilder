@@ -34,7 +34,15 @@ class DisMax extends Query
      */
     public function query($query)
     {
-        $this->query['dis_max']['query'][] = $query;
+        $this->query['dis_max']['queries'][] = $query;
+    }
+
+    /**
+     * @param array $queries
+     */
+    public function queries($queries=[])
+    {
+        $this->query['dis_max']['queries'] = $queries;
     }
 
 }
