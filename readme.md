@@ -1,5 +1,10 @@
 # ElasticBuilder
 
+[![Latest Stable Version](https://poser.pugx.org/brokerexchange/elasticbuilder/version)](https://packagist.org/packages/brokerexchange/elasticbuilder)
+[![Total Downloads](https://poser.pugx.org/brokerexchange/elasticbuilder/downloads)](https://packagist.org/packages/brokerexchange/elasticbuilder)
+[![License](https://poser.pugx.org/brokerexchange/elasticbuilder/license)](https://packagist.org/packages/brokerexchange/elasticbuilder)
+
+
 _Query DSL Builder for Elasticsearch queries_
 
 Use ElasticBuilder to easily combine multiple queries/filters/aggregations into Elasticsearch Query DSL within Laravel projects!
