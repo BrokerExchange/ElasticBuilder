@@ -8,6 +8,14 @@ Use ElasticBuilder to easily combine multiple queries/filters/aggregations into 
 
 ElasticBuilder is a series of Abstract classes you can use to map your query input arguments to the query DSL itself.
 
+## Installation
+
+*Add `"ben/elasticbuilder":"*"` to your composer.json file
+*Run `composer update`
+*Add provider `ElasticBuilder\ElasticBuilderServiceProvider::class` to your list of providers in `app/config/app.php` of your laravel project
+*Add facade `'Eb' => ElasticBuilder\Eb::class` to your list of aliases in `app/config/app.php` of your laravel project
+
+
 ## Examples
 
 **Extend Abstract Class**
@@ -39,6 +47,7 @@ if($this->request->has('search')){
 $this->must($match);
 ```
 
+**Filter**
 Here is an example of adding a filter to the bool query.
 
 ```php
@@ -47,6 +56,7 @@ $filter = \Eb::range('published_at',['lte' => Carbon::now()->toIso8601String()])
 $this->filter($filter);
 ```
 
+**Facade**
 Example of using a Facade
 
 ```php
@@ -57,6 +67,7 @@ $query = Eb::boolean()
 var_dump($query);
 ```
 
+**Other**
 More Examples
 
 ```php
