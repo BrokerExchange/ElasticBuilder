@@ -1,9 +1,11 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: bmix
+ * User: brian@brokerbin.com
  * Date: 6/8/16
  * Time: 1:59 PM
+ * License: The MIT License (MIT)
+ * Copyright: (c) <Broker Exchange Network>
  */
 
 

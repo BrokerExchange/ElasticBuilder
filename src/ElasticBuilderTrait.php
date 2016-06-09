@@ -1,9 +1,11 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: bmix
+ * User: brian@brokerbin.com
  * Date: 6/9/16
  * Time: 7:31 AM
+ * License: The MIT License (MIT)
+ * Copyright: (c) <Broker Exchange Network>
  */
 
 namespace ElasticBuilder;

@@ -1,7 +1,8 @@
 {
-  "name": "ben/elasticbuilder",
+  "name": "brokerexchange/elasticbuilder",
   "description": "Query DSL Builder for Elasticsearch queries.",
-  "license": "Broker Exchange Network",
+  "license": "MIT",
+  "homepage": "https://github.com/BrokerExchange/ElasticBuilder",
   "authors": [
     {
       "name": "Brian Mix",

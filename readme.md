@@ -4,6 +4,14 @@ _Query DSL Builder for Elasticsearch queries_
 
 Use ElasticBuilder to easily combine multiple queries/filters/aggregations into Elasticsearch Query DSL.
 
+## License
+
+ElasticBuilder is released under the MIT Open Source License, <https://opensource.org/licenses/MIT>
+
+## Copyright
+
+ElasticBuilder &copy; Broker Exchange Network
+
 ## Usage 
 
 ElasticBuilder is a series of Abstract classes you can use to map your query input arguments to the query DSL itself.
