@@ -6,14 +6,15 @@
  * Time: 2:57 PM
  */
 
-namespace ElasticBuilder\Facade;
+namespace ElasticBuilder;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Elasticquent\ElasticquentServiceProvider
+ * Class ElasticQueryBuilderFacade
+ * @package ElasticBuilder
  */
-class DisMax extends Facade
+class Eb extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -22,6 +23,6 @@ class DisMax extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'elasticbuilder.dis_max';
+        return 'elasticbuilder';
     }
 }

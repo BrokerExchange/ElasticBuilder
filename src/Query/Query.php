@@ -81,18 +81,22 @@ abstract class Query
 
     /**
      * @param $agg
+     * @return $this
      */
     public function aggregate($agg)
     {
         $this->aggregations = $agg;
+        return $this;
     }
 
     /**
      * @param $sort
+     * @return $this
      */
     public function setSort($sort)
     {
         $this->sort = $sort;
+        return $this;
     }
     
     public function toJson()
