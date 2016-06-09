@@ -70,3 +70,24 @@ $query = Boolean::must(['term'=>['category_id'=>1]])
     ->filter(['range' => ['published_at' => ['lte' => Carbon::now()->toIso8601String()]]])
     ->get();
 ```
+
+More Examples
+
+```php
+        
+$query = Eb::boolean()
+    ->must(Eb::term('category_id',1))
+    ->filter(Eb::range('published_at',['lte' => Carbon::now()->toIso8601String(),'gte' => Carbon::now()->subDay(10)->toIso8601String()]));
+
+$query = \Eb::multi_match(['title^3','summary^1','body','userName^2','categoryName^2','tag_string^1'],'lorim ipsum','and','cross_fields');
+
+$query = Article::boolean()
+    ->must(Eb::term('category_id',1))
+    ->aggregate(Eb::agg()->terms('categories','category_id'));
+
+$query = Article::agg()
+    ->terms('categories','category_id');
+
+var_dump($query);
+
+```
