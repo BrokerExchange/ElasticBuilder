@@ -19,7 +19,7 @@ ElasticBuilder is a series of Abstract classes you can use to map your query inp
 
 ## Examples
 
-**Extend Abstract Class**
+### Extend Abstract Class
 
 First you simply extend one of the abstract query classes ... in this case Boolean
 
@@ -33,7 +33,7 @@ class ArticleQuery extends Boolean
 }
 ```
 
-**Add Clause**
+### Add Clause
 
 Here is how you go about adding a clause to a query (in this case must clause to bool query).
 
@@ -48,7 +48,8 @@ if($this->request->has('search')){
 $this->must($match);
 ```
 
-**Filter**
+### Filter
+
 Here is an example of adding a filter to the bool query.
 
 ```php
@@ -57,7 +58,8 @@ $filter = \Eb::range('published_at',['lte' => Carbon::now()->toIso8601String()])
 $this->filter($filter);
 ```
 
-**Facade**
+### Facade
+
 Example of using a Facade
 
 ```php
@@ -68,7 +70,8 @@ $query = Eb::boolean()
 var_dump($query);
 ```
 
-**Other**
+### Other
+
 More Examples
 
 ```php
