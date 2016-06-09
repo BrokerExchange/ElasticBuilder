@@ -8,8 +8,18 @@
 
 namespace ElasticBuilder;
 
+/**
+ * Class Aggregation
+ * @package ElasticBuilder
+ */
 class Aggregation
 {
+
+    /**
+     * @param $namespace
+     * @param $field
+     * @return array
+     */
     public function terms($namespace,$field)
     {
         return [

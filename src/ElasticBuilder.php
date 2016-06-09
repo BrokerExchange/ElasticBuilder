@@ -11,23 +11,41 @@ namespace ElasticBuilder;
 use ElasticBuilder\Query\Boolean;
 use ElasticBuilder\Query\DisMax;
 
+/**
+ * Class ElasticBuilder
+ * @package ElasticBuilder
+ */
 class ElasticBuilder
 {
+    /**
+     * @return Aggregation
+     */
     public function agg()
     {
         return new Aggregation;
     }
-    
+
+    /**
+     * @return Boolean
+     */
     public function boolean()
     {
         return new Boolean();
     }
-    
+
+    /**
+     * @return DisMax
+     */
     public function dis_max()
     {
         return new DisMax();
     }
 
+    /**
+     * @param $field
+     * @param $value
+     * @return array
+     */
     public function term($field,$value)
     {
         return [
@@ -37,6 +55,12 @@ class ElasticBuilder
         ];
     }
 
+    /**
+     * @param $field
+     * @param array $ranges
+     * @param int $boost
+     * @return array
+     */
     public function range($field,$ranges=[],$boost=1)
     {
         
@@ -49,6 +73,16 @@ class ElasticBuilder
         ];
     }
 
+    /**
+     * @param $field
+     * @param $query
+     * @param string $operator
+     * @param string $type
+     * @param int $minimum
+     * @param int $boost
+     * @param string $analyzer
+     * @return array
+     */
     public function match($field,$query,$operator='or',$type='boolean',$minimum=1,$boost=1,$analyzer='standard')
     {
         return [
@@ -66,6 +100,16 @@ class ElasticBuilder
         ];
     }
 
+    /**
+     * @param array $fields
+     * @param $query
+     * @param string $operator
+     * @param string $type
+     * @param int $minimum
+     * @param int $boost
+     * @param string $analyzer
+     * @return array
+     */
     public function multi_match($fields=[],$query,$operator='or',$type='cross_match',$minimum=1,$boost=1,$analyzer='standard')
     {
         return [
@@ -81,6 +125,9 @@ class ElasticBuilder
         ];
     }
 
+    /**
+     * @return array
+     */
     public function match_all()
     {
         return [

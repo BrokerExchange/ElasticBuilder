@@ -98,7 +98,10 @@ abstract class Query
         $this->sort = $sort;
         return $this;
     }
-    
+
+    /**
+     * @return string
+     */
     public function toJson()
     {
         return json_encode($this->get());
