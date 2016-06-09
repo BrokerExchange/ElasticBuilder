@@ -10,6 +10,7 @@ ElasticBuilder is a series of Abstract classes you can use to map your query inp
 
 ## Installation
 
+
 *Add ` "benelasticbuilder":"*" ` to your composer.json file
 *Run `composer update`
 *Add provider `ElasticBuilder\ElasticBuilderServiceProvider::class` to your list of providers in `app/config/app.php` of your laravel project
