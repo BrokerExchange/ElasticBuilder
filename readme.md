@@ -59,20 +59,22 @@ $query = Article::boolean()
     ->must(Eb::term('category_id',1))
     ->aggregate(Eb::agg()->terms('categories','category_id'));
 var_dump($query);
+```
 
 ## Trait
 
-Apply the trait class to an eloquent model (possibly one already using Elasticquent/Elasticquent or similar package)
+Apply the trait class to an eloquent model (possibly one already using [Elasticquent/Elasticquent](https://github.com/elasticquent/Elasticquent) or similar package)
 
 ```php
 <?php
+    use ElasticBuilder\ElasticBuilderTrait;
+
     /**
      * Class Article
      * @package App
      */
     class Article extends Model
     {
-        use ElasticquentTrait;
         use ElasticBuilderTrait;
 ```
 
