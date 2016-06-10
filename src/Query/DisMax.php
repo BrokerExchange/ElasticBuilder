@@ -22,11 +22,12 @@ class DisMax extends Query
     protected $queries; //the queries portion of the dis_max query
 
     /**
-     * ElasticBoolQuery constructor.
+     * DisMax constructor.
+     * @param int $boost
      */
-    public function __construct()
+    public function __construct($boost=1)
     {
-        $this->query = ['dis_max'=>[]];
+        $this->query = ['dis_max'=>['boost'=>$boost]];
     }
 
     /**

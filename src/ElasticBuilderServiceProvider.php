@@ -35,7 +35,7 @@ class ElasticBuilderServiceProvider extends ServiceProvider
     public function register()
     {
         // boolean query class
-        $this->app->singleton('elasticbuilder', function ($app) {
+        $this->app->singleton('elasticbuilder', function () {
             return new ElasticBuilder;
         });
         

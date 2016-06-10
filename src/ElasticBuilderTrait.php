@@ -11,6 +11,8 @@
 namespace ElasticBuilder;
 
 use ElasticBuilder\Query\Boolean;
+use ElasticBuilder\Query\Boosting;
+use ElasticBuilder\Query\ConstantScore;
 use ElasticBuilder\Query\DisMax;
 
 /**
@@ -20,19 +22,22 @@ use ElasticBuilder\Query\DisMax;
 trait ElasticBuilderTrait
 {
     /**
+     * @param int $boost
+     * @param int $minimum_should_match
      * @return Boolean
      */
-    static function boolean()
+    static function boolean($boost=1,$minimum_should_match=1)
     {
-        return new Boolean;
+        return new Boolean($boost,$minimum_should_match);
     }
 
     /**
+     * @param int $boost
      * @return DisMax
      */
-    static function dis_max()
+    static function dis_max($boost=1)
     {
-        return new DisMax;
+        return new DisMax($boost);
     }
 
     /**
@@ -41,5 +46,23 @@ trait ElasticBuilderTrait
     static function agg()
     {
         return new Aggregation;
+    }
+
+    /**
+     * @param int $negative_boost
+     * @return Boosting
+     */
+    static function boosting($negative_boost=1)
+    {
+        return new Boosting($negative_boost);
+    }
+
+    /**
+     * @param int $boost
+     * @return ConstantScore
+     */
+    static function constant_score($boost=1)
+    {
+        return new ConstantScore($boost);
     }
 }

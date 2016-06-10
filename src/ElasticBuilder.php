@@ -30,35 +30,40 @@ class ElasticBuilder
     }
 
     /**
+     * @param int $boost
+     * @param int $minimum_should_match
      * @return Boolean
      */
-    public function boolean()
+    public function boolean($boost=1,$minimum_should_match=1)
     {
-        return new Boolean();
+        return new Boolean($boost,$minimum_should_match);
     }
 
     /**
+     * @param int $boost
      * @return DisMax
      */
-    public function dis_max()
+    public function dis_max($boost=1)
     {
-        return new DisMax();
+        return new DisMax($boost);
     }
 
     /**
+     * @param int $boost
      * @return ConstantScore
      */
-    public function constant_score()
+    public function constant_score($boost=1)
     {
-        return new ConstantScore;
+        return new ConstantScore($boost);
     }
 
     /**
+     * @param int $negative_boost
      * @return Boosting
      */
-    public function boosting()
+    public function boosting($negative_boost=1)
     {
-        return new Boosting;
+        return new Boosting($negative_boost);
     }
 
     /**
