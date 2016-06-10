@@ -28,7 +28,7 @@ as well as a Trait you can apply to your eloquent models.
 
 ElasticBuilder must use Elasticsearch 1.x or greater, and Laravel 5.x
 
-* Add ```"ben/elasticbuilder":"*"``` to your `composer.json` file
+* Add ```"brokerexchange/elasticbuilder": "^1.0.0"``` to your `composer.json` file
 * Run `composer update`
 * Add provider `ElasticBuilder\ElasticBuilderServiceProvider::class` to your list of providers in `app/config/app.php` of your laravel project
 * Add facade `'Eb' => ElasticBuilder\Eb::class` to your list of aliases in `app/config/app.php` of your laravel project
