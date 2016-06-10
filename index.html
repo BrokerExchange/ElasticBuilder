@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Elasticbuilder by BrokerExchange</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Elasticbuilder</h1>
+      <h2 class="project-tagline">Query DSL Builder for Elasticsearch queries</h2>
+      <a href="https://github.com/BrokerExchange/ElasticBuilder" class="btn">View on GitHub</a>
+      <a href="https://github.com/BrokerExchange/ElasticBuilder/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/BrokerExchange/ElasticBuilder/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="elasticbuilder" class="anchor" href="#elasticbuilder" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>ElasticBuilder</h1>
+
+<p><a href="https://packagist.org/packages/brokerexchange/elasticbuilder"><img src="https://poser.pugx.org/brokerexchange/elasticbuilder/version" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/brokerexchange/elasticbuilder"><img src="https://poser.pugx.org/brokerexchange/elasticbuilder/downloads" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/brokerexchange/elasticbuilder"><img src="https://poser.pugx.org/brokerexchange/elasticbuilder/license" alt="License"></a></p>
+
+<p><em>Query DSL Builder for Elasticsearch queries</em></p>
+
+<p>Use ElasticBuilder to easily combine multiple queries/filters/aggregations into Elasticsearch Query DSL within Laravel projects!</p>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
+
+<p>ElasticBuilder is released under the MIT Open Source License, <a href="https://opensource.org/licenses/MIT">https://opensource.org/licenses/MIT</a></p>
+
+<h2>
+<a id="copyright" class="anchor" href="#copyright" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Copyright</h2>
+
+<p>ElasticBuilder © Broker Exchange Network</p>
+
+<h2>
+<a id="overview" class="anchor" href="#overview" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Overview</h2>
+
+<p>ElasticBuilder is a series of Laravel Framework Package consisting of Static Methods and Abstract classes you can use to build 
+Elasticsearch query DSL AND map your query input arguments to the DSL as it is generated. 
+Also handles paging arguments, sorting, and aggregations. Provides Laravel Framework Service Provider and Facade, 
+as well as a Trait you can apply to your eloquent models.</p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
+
+<ul>
+<li>Add <code>"ben/elasticbuilder":"*"</code> to your <code>composer.json</code> file</li>
+<li>Run <code>composer update</code>
+</li>
+<li>Add provider <code>ElasticBuilder\ElasticBuilderServiceProvider::class</code> to your list of providers in <code>app/config/app.php</code> of your laravel project</li>
+<li>Add facade <code>'Eb' =&gt; ElasticBuilder\Eb::class</code> to your list of aliases in <code>app/config/app.php</code> of your laravel project</li>
+</ul>
+
+<h2>
+<a id="examples" class="anchor" href="#examples" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Examples</h2>
+
+<h3>
+<a id="facade" class="anchor" href="#facade" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Facade</h3>
+
+<p>Example of using a Facade</p>
+
+<p>Here is how you add a clause to a query (in this case must clause to bool query).</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-pse">&lt;?php</span><span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-smi">$query</span> <span class="pl-k">=</span> <span class="pl-c1">Eb</span><span class="pl-k">::</span>boolean()</span>
+<span class="pl-s1">    <span class="pl-k">-&gt;</span>must(<span class="pl-c1">Eb</span><span class="pl-k">::</span>term(<span class="pl-s"><span class="pl-pds">'</span>category_id<span class="pl-pds">'</span></span>,<span class="pl-c1">1</span>))</span>
+<span class="pl-s1">    <span class="pl-k">-&gt;</span>filter(<span class="pl-c1">Eb</span><span class="pl-k">::</span>range(<span class="pl-s"><span class="pl-pds">'</span>published_at<span class="pl-pds">'</span></span>,[<span class="pl-s"><span class="pl-pds">'</span>lte<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-c1">Carbon</span><span class="pl-k">::</span>now()<span class="pl-k">-&gt;</span>toIso8601String(),<span class="pl-s"><span class="pl-pds">'</span>gte<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-c1">Carbon</span><span class="pl-k">::</span>now()<span class="pl-k">-&gt;</span>subDay(<span class="pl-c1">10</span>)<span class="pl-k">-&gt;</span>toIso8601String()]));</span>
+<span class="pl-s1"><span class="pl-c1">var_dump</span>(<span class="pl-smi">$query</span>);</span></pre></div>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-pse">&lt;?php</span><span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-smi">$query</span> <span class="pl-k">=</span> <span class="pl-c1">\</span><span class="pl-c1">Eb</span><span class="pl-k">::</span>multi_match([<span class="pl-s"><span class="pl-pds">'</span>title^3<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>summary^1<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>body<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>userName^2<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>categoryName^2<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>tag_string^1<span class="pl-pds">'</span></span>],<span class="pl-s"><span class="pl-pds">'</span>lorim ipsum<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>and<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>cross_fields<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1"><span class="pl-c1">var_dump</span>(<span class="pl-smi">$query</span>);</span></pre></div>
+
+<p>Bool query with aggregation</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-pse">&lt;?php</span><span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-smi">$query</span> <span class="pl-k">=</span> <span class="pl-c1">Article</span><span class="pl-k">::</span>boolean()</span>
+<span class="pl-s1">    <span class="pl-k">-&gt;</span>must(<span class="pl-c1">Eb</span><span class="pl-k">::</span>term(<span class="pl-s"><span class="pl-pds">'</span>category_id<span class="pl-pds">'</span></span>,<span class="pl-c1">1</span>))</span>
+<span class="pl-s1">    <span class="pl-k">-&gt;</span>aggregate(<span class="pl-c1">Eb</span><span class="pl-k">::</span>agg()<span class="pl-k">-&gt;</span>terms(<span class="pl-s"><span class="pl-pds">'</span>categories<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>category_id<span class="pl-pds">'</span></span>));</span>
+<span class="pl-s1"><span class="pl-c1">var_dump</span>(<span class="pl-smi">$query</span>);</span></pre></div>
+
+<h2>
+<a id="trait" class="anchor" href="#trait" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Trait</h2>
+
+<p>Apply the trait class to an eloquent model (possibly one already using <a href="https://github.com/elasticquent/Elasticquent">Elasticquent/Elasticquent</a> or similar package)</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-pse">&lt;?php</span><span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-k">use</span> <span class="pl-c1">ElasticBuilder\ElasticBuilderTrait</span>;</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c">/**</span></span>
+<span class="pl-s1"><span class="pl-c">     * Class Article</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@package</span> App</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-k">class</span> <span class="pl-en">Article</span> <span class="pl-k">extends</span> <span class="pl-e">Model</span></span>
+<span class="pl-s1">    {</span>
+<span class="pl-s1">        <span class="pl-k">use</span> <span class="pl-c1">ElasticBuilderTrait</span>;</span></pre></div>
+
+<p>Now you can use a static bool,dismax,boosting etc query from within a model simlilar to the eloquent query builder!</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-pse">&lt;?php</span><span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c1">Article</span><span class="pl-k">::</span>bool()<span class="pl-k">-&gt;</span>filter(<span class="pl-c1">Eb</span><span class="pl-k">::</span>term(<span class="pl-s"><span class="pl-pds">'</span>category_id<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>1);</span></span></pre></div>
+
+<p>or </p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-pse">&lt;?php</span><span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c1">Article</span><span class="pl-k">::</span>dis_max()<span class="pl-k">-&gt;</span>query(<span class="pl-c1">Eb</span><span class="pl-k">::</span>match(<span class="pl-s"><span class="pl-pds">'</span>body<span class="pl-pds">'</span></span>,<span class="pl-smi">$keywords</span>));</span></pre></div>
+
+<h3>
+<a id="extending-a-query-class" class="anchor" href="#extending-a-query-class" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Extending A Query Class</h3>
+
+<p>Any of the simply extend one of the query classes ... in this case Boolean</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-pse">&lt;?php</span><span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">ElasticBuilder\Query\Boolean</span>;</span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">ElasticBuilder\Eb</span>;</span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Carbon\Carbon</span>;</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">class</span> <span class="pl-en">ArticleQuery</span> <span class="pl-k">extends</span> <span class="pl-e">Boolean</span></span>
+<span class="pl-s1">{</span>
+<span class="pl-s1">     <span class="pl-k">private</span> <span class="pl-k">function</span> <span class="pl-en">published</span>()</span>
+<span class="pl-s1">     {</span>
+<span class="pl-s1">         <span class="pl-smi">$filter</span> <span class="pl-k">=</span> <span class="pl-c1">Eb</span><span class="pl-k">::</span>range(<span class="pl-s"><span class="pl-pds">'</span>published_at<span class="pl-pds">'</span></span>,[<span class="pl-s"><span class="pl-pds">'</span>lte<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-c1">Carbon</span><span class="pl-k">::</span>now()<span class="pl-k">-&gt;</span>toIso8601String()]);</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">         <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span>filter(<span class="pl-smi">$filter</span>);</span>
+<span class="pl-s1">     }</span>
+<span class="pl-s1">}</span></pre></div>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-pse">&lt;?php</span><span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">if</span>(<span class="pl-smi">$this</span><span class="pl-k">-&gt;</span><span class="pl-smi">request</span><span class="pl-k">-&gt;</span>has(<span class="pl-s"><span class="pl-pds">'</span>search<span class="pl-pds">'</span></span>)){</span>
+<span class="pl-s1">    <span class="pl-smi">$search</span> <span class="pl-k">=</span> <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span><span class="pl-smi">request</span><span class="pl-k">-&gt;</span>get(<span class="pl-s"><span class="pl-pds">'</span>search<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1">    <span class="pl-smi">$match</span> <span class="pl-k">=</span> <span class="pl-c1">\</span><span class="pl-c1">Eb</span><span class="pl-k">::</span>multi_match([<span class="pl-s"><span class="pl-pds">'</span>title^3<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>summary^1<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>body<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>userName^2<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>categoryName^2<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>tag_string^1<span class="pl-pds">'</span></span>],<span class="pl-smi">$search</span>,<span class="pl-s"><span class="pl-pds">'</span>and<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>cross_fields<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1">} <span class="pl-k">else</span> {</span>
+<span class="pl-s1">    <span class="pl-smi">$match</span> <span class="pl-k">=</span> <span class="pl-c1">\</span><span class="pl-c1">Eb</span><span class="pl-k">::</span>match_all();</span>
+<span class="pl-s1">}</span>
+<span class="pl-s1"><span class="pl-smi">$this</span><span class="pl-k">-&gt;</span>must(<span class="pl-smi">$match</span>);</span></pre></div>
+
+<p>Here is an example of adding a filter to the bool query from within the extended class</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-pse">&lt;?php</span><span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-smi">$filter</span> <span class="pl-k">=</span> <span class="pl-c1">\</span><span class="pl-c1">Eb</span><span class="pl-k">::</span>range(<span class="pl-s"><span class="pl-pds">'</span>published_at<span class="pl-pds">'</span></span>,[<span class="pl-s"><span class="pl-pds">'</span>lte<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-c1">Carbon</span><span class="pl-k">::</span>now()<span class="pl-k">-&gt;</span>toIso8601String()]);</span>
+<span class="pl-s1"><span class="pl-smi">$this</span><span class="pl-k">-&gt;</span>filter(<span class="pl-smi">$filter</span>);</span></pre></div>
+
+<h3>
+<a id="other" class="anchor" href="#other" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Other</h3>
+
+<p>More Examples</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-pse">&lt;?php</span><span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-smi">$query</span> <span class="pl-k">=</span> <span class="pl-c1">Article</span><span class="pl-k">::</span>agg()</span>
+<span class="pl-s1">    <span class="pl-k">-&gt;</span>terms(<span class="pl-s"><span class="pl-pds">'</span>categories<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>category_id<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1"><span class="pl-c1">var_dump</span>(<span class="pl-smi">$query</span>);</span>
+<span class="pl-s1"></span></pre></div>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/BrokerExchange/ElasticBuilder">Elasticbuilder</a> is maintained by <a href="https://github.com/BrokerExchange">BrokerExchange</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
