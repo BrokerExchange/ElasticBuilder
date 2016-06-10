@@ -26,6 +26,7 @@ as well as a Trait you can apply to your eloquent models.
 
 ## Installation
 
+ElasticBuilder must use Elasticsearch 1.x or greater, and Laravel 5.x
 
 * Add ```"ben/elasticbuilder":"*"``` to your `composer.json` file
 * Run `composer update`
@@ -142,7 +143,6 @@ $this->filter($filter);
 ### Other
 
 More Examples
-```
 
 ```php
 <?php

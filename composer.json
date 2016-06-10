@@ -1,8 +1,16 @@
 {
   "name": "brokerexchange/elasticbuilder",
   "description": "Query DSL Builder for Elasticsearch queries.",
+  "keywords": [
+    "elasticsearch",
+    "eloquent",
+    "laravel",
+    "query",
+    "builder",
+    "generator"
+  ],
   "license": "MIT",
-  "homepage": "https://github.com/BrokerExchange/ElasticBuilder",
+  "homepage": "http://brokerexchange.github.io/ElasticBuilder/",
   "authors": [
     {
       "name": "Brian Mix",
