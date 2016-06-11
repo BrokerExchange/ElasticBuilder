@@ -179,5 +179,18 @@ class Aggregation
         ];
     }
 
+    /**
+     * @param $namespace
+     * @param $filter
+     * @return array
+     */
+    public function filter($namespace,$filter)
+    {
+        return [
+            $namespace => [
+                'filter' => $filter
+            ]
+        ];
+    }
 
 }
