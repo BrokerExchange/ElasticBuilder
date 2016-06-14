@@ -42,13 +42,84 @@ abstract class Query
     protected $page = 1;
 
     /**
-     * @return array
+     * @var string
+     */
+    protected $index = '';
+
+    /**
+     * @var string
+     */
+    protected $type = '';
+
+    /**
+     * @return mixed
      */
     public function get()
     {
+
+        if(!empty($this->index) && !empty($this->type)){
+            $params['index'] = $this->index;
+            $params['type'] = $this->type;
+            $params['body']['query'] = $this->query;
+            if(count($this->aggregations)) $params['body']['aggregations'] = $this->aggregations;
+            $params['body']['sort'] = $this->sort;
+            $params['size'] = $this->size;
+            $params['from'] = $this->offset();
+
+            $results = \Es::search($params);
+
+            $this->hits = collect($results['hits']['hits']);
+
+            return $this->hits;
+
+
+        }
+
         return $this->query;
     }
+    
+    public function paginate($perPage,$page)
+    {
+        $this->page=$page;
+        $this->size=$perPage;
+        if(!empty($this->index) && !empty($this->type)){
+            $params['index'] = $this->index;
+            $params['type'] = $this->type;
+            $params['body']['query'] = $this->query;
+            if(count($this->aggregations)) $params['body']['aggregations'] = $this->aggregations;
+            $params['body']['sort'] = $this->sort;
+            $params['size'] = $this->size;
+            $params['from'] = $this->offset();
 
+            $results = \Es::search($params);
+            
+            //TODO: new up pagination class and return it
+            
+            $this->hits = collect($results['hits']['hits']);
+
+            return $this->hits;
+
+
+        }
+    }
+
+    /**
+     * @param $index
+     */
+    public function setIndex($index)
+    {
+
+        $this->index = $index;
+    }
+
+    /**
+     * @param $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+    
     /**
      * @return mixed
      */

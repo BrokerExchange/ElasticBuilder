@@ -26,8 +26,32 @@ trait ElasticBuilderTrait
      * @param int $minimum_should_match
      * @return Boolean
      */
-    static function boolean($boost=1,$minimum_should_match=1)
+    public function boolean($boost=1,$minimum_should_match=1)
     {
+
+        //dump(class_uses(self::class));
+//        dump(class_parents(self::class));
+//        dump(get_class_methods(self::class));
+//        dump(get_called_class());
+//        exit;
+
+        //dd($this->getIndexName());
+
+        if(method_exists($this,'getIndexName')){
+            $query = new Boolean($boost,$minimum_should_match);
+            $query->setIndex($this->getIndexName());
+            $query->setType($this->getTypeName());
+            return $query;
+        }
+
+//        if(array_search('ElasticquentTrait',class_uses(self::class))){
+//            $query = new Boolean($boost,$minimum_should_match);
+////            dd($this->getIndexName());
+//            $query->index = $this->getIndexName();
+////            $query->setType($this->getTypeName());
+//            return $query;
+//        }
+
         return new Boolean($boost,$minimum_should_match);
     }
 
@@ -35,7 +59,7 @@ trait ElasticBuilderTrait
      * @param int $boost
      * @return DisMax
      */
-    static function dis_max($boost=1)
+    public function dis_max($boost=1)
     {
         return new DisMax($boost);
     }
@@ -43,7 +67,7 @@ trait ElasticBuilderTrait
     /**
      * @return Aggregation
      */
-    static function agg()
+    public function agg()
     {
         return new Aggregation;
     }
@@ -52,7 +76,7 @@ trait ElasticBuilderTrait
      * @param int $negative_boost
      * @return Boosting
      */
-    static function boosting($negative_boost=1)
+    public function boosting($negative_boost=1)
     {
         return new Boosting($negative_boost);
     }
@@ -61,7 +85,7 @@ trait ElasticBuilderTrait
      * @param int $boost
      * @return ConstantScore
      */
-    static function constant_score($boost=1)
+    public function constant_score($boost=1)
     {
         return new ConstantScore($boost);
     }

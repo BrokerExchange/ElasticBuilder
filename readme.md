@@ -19,7 +19,7 @@ ElasticBuilder &copy; Broker Exchange Network
 
 ## Overview 
 
-ElasticBuilder is a series of Laravel Framework Package consisting of Static Methods and Abstract classes you can use to build 
+ElasticBuilder is a Laravel 5.x Framework Package consisting of Static Methods and Abstract classes you can use to build 
 Elasticsearch query DSL AND map your query input arguments to the DSL as it is generated. 
 Also handles paging arguments, sorting, and aggregations. Provides Laravel Framework Service Provider and Facade, 
 as well as a Trait you can apply to your eloquent models.
