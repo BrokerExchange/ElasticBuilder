@@ -29,28 +29,11 @@ trait ElasticBuilderTrait
     public function boolean($boost=1,$minimum_should_match=1)
     {
 
-        //dump(class_uses(self::class));
-//        dump(class_parents(self::class));
-//        dump(get_class_methods(self::class));
-//        dump(get_called_class());
-//        exit;
-
-        //dd($this->getIndexName());
-
-        if(method_exists($this,'getIndexName')){
-            $query = new Boolean($boost,$minimum_should_match);
-            $query->setIndex($this->getIndexName());
-            $query->setType($this->getTypeName());
+        if(array_search('Elasticquent\ElasticquentTrait',class_uses($this))) {
+            $query = new Boolean($boost, $minimum_should_match);
+            $query->setModel($this);
             return $query;
         }
-
-//        if(array_search('ElasticquentTrait',class_uses(self::class))){
-//            $query = new Boolean($boost,$minimum_should_match);
-////            dd($this->getIndexName());
-//            $query->index = $this->getIndexName();
-////            $query->setType($this->getTypeName());
-//            return $query;
-//        }
 
         return new Boolean($boost,$minimum_should_match);
     }
@@ -61,6 +44,12 @@ trait ElasticBuilderTrait
      */
     public function dis_max($boost=1)
     {
+        if(array_search('Elasticquent\ElasticquentTrait',class_uses($this))) {
+            $query = new DisMax($boost);
+            $query->setModel($this);
+            return $query;
+        }
+
         return new DisMax($boost);
     }
 
@@ -78,6 +67,14 @@ trait ElasticBuilderTrait
      */
     public function boosting($negative_boost=1)
     {
+        if(array_search('Elasticquent\ElasticquentTrait',class_uses($this))) {
+            $query = new Boosting($negative_boost);
+            $query->setIndex($this->getIndexName());
+            $query->setType($this->getTypeName());
+            $query->setModel($this);
+            return $query;
+        }
+
         return new Boosting($negative_boost);
     }
 
@@ -87,6 +84,14 @@ trait ElasticBuilderTrait
      */
     public function constant_score($boost=1)
     {
+        if(array_search('Elasticquent\ElasticquentTrait',class_uses($this))) {
+            $query = new ConstantScore($boost);
+            $query->setIndex($this->getIndexName());
+            $query->setType($this->getTypeName());
+            $query->setModel($this);
+            return $query;
+        }
+
         return new ConstantScore($boost);
     }
 }

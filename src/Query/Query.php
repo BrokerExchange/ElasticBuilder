@@ -52,55 +52,54 @@ abstract class Query
     protected $type = '';
 
     /**
+     * @var
+     */
+    protected $model;
+
+    /**
      * @return mixed
      */
     public function get()
     {
 
-        if(!empty($this->index) && !empty($this->type)){
-            $params['index'] = $this->index;
-            $params['type'] = $this->type;
-            $params['body']['query'] = $this->query;
-            if(count($this->aggregations)) $params['body']['aggregations'] = $this->aggregations;
-            $params['body']['sort'] = $this->sort;
-            $params['size'] = $this->size;
-            $params['from'] = $this->offset();
+        if(
+            is_object($this->model) &&
+            is_subclass_of($this->model,'Illuminate\Database\Eloquent\Model')
+        ){
 
-            $results = \Es::search($params);
-
-            $this->hits = collect($results['hits']['hits']);
-
-            return $this->hits;
-
+            return $this->model->searchByQuery($this->query,$this->aggregations,$source=null,$this->size,$this->offset(),$this->sort());
 
         }
 
         return $this->query;
     }
-    
-    public function paginate($perPage,$page)
+
+    /**
+     * @param $limit
+     * @return array
+     */
+    public function paginate($limit)
     {
-        $this->page=$page;
-        $this->size=$perPage;
-        if(!empty($this->index) && !empty($this->type)){
-            $params['index'] = $this->index;
-            $params['type'] = $this->type;
-            $params['body']['query'] = $this->query;
-            if(count($this->aggregations)) $params['body']['aggregations'] = $this->aggregations;
-            $params['body']['sort'] = $this->sort;
-            $params['size'] = $this->size;
-            $params['from'] = $this->offset();
+        if(
+            is_object($this->model) && 
+            is_subclass_of($this->model,'Illuminate\Database\Eloquent\Model')
+        ){
 
-            $results = \Es::search($params);
-            
-            //TODO: new up pagination class and return it
-            
-            $this->hits = collect($results['hits']['hits']);
-
-            return $this->hits;
-
+            $this->size = $limit;
+            $results = $this->model->searchByQuery($this->query,$this->aggregations,$source=null,$this->size,$this->offset(),$this->sort());
+            return $results->paginate($limit);
 
         }
+
+        return $this->query;
+    }
+
+    /**
+     * @param $model
+     */
+    public function setModel($model)
+    {
+        $this->model = $model;
     }
 
     /**
