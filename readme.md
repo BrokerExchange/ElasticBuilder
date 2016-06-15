@@ -57,16 +57,6 @@ $query = \Eb::multi_match(['title^3','summary^1','body','userName^2','categoryNa
 var_dump($query);
 ```
 
-Bool query with aggregation
-
-```php
-<?php
-$query = Article::boolean()
-    ->must(Eb::term('category_id',1))
-    ->aggregate(Eb::agg()->terms('categories','category_id'));
-var_dump($query);
-```
-
 ## Trait
 
 Apply the trait class to an eloquent model (possibly one already using [Elasticquent/Elasticquent](https://github.com/elasticquent/Elasticquent) or similar package)
@@ -96,6 +86,27 @@ or
 ```php
 <?php
     Article::dis_max()->query(Eb::match('body',$keywords));
+```
+
+Bool query with aggregation as eloquent model trait
+
+```php
+<?php
+
+    //trait example
+    $results = $article->boolean()
+        ->must(Eb::match('body','keyword search string'))
+        ->aggregate(Eb::agg()->terms('categories','category_id'))->get(); //returns Elasticquent Results Object
+            
+    var_dump($results);
+       
+       
+    //trait exaple with paging
+    $results = $article->boolean()
+       ->must(Eb::match('body','keyword search string'))
+       ->aggregate(Eb::agg()->terms('categories','category_id'))->paginate(20); //returns Elasticquent Paginator Object
+       
+    var_dump($results);
 ```
 
 
