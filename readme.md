@@ -1,8 +1,10 @@
 # ElasticBuilder
 
 [![Latest Stable Version](https://poser.pugx.org/brokerexchange/elasticbuilder/version)](https://packagist.org/packages/brokerexchange/elasticbuilder)
+[![Latest Unstable Version](https://poser.pugx.org/brokerexchange/elasticbuilder/v/unstable)](https://packagist.org/packages/brokerexchange/elasticbuilder)
 [![Total Downloads](https://poser.pugx.org/brokerexchange/elasticbuilder/downloads)](https://packagist.org/packages/brokerexchange/elasticbuilder)
 [![License](https://poser.pugx.org/brokerexchange/elasticbuilder/license)](https://packagist.org/packages/brokerexchange/elasticbuilder)
+[![composer.lock](https://poser.pugx.org/brokerexchange/elasticbuilder/composerlock)](https://packagist.org/packages/brokerexchange/elasticbuilder)
 
 
 _Query DSL Builder for Elasticsearch queries_
