@@ -1,6 +1,6 @@
 # ElasticBuilder
 
-[![Latest Stable Version](https://poser.pugx.org/brokerexchange/elasticbuilder/version)](https://packagist.org/packages/brokerexchange/elasticbuilder)
+[![Latest Stable Version](https://poser.pugx.org/brokerexchange/elasticbuilder/v/stable)](https://packagist.org/packages/brokerexchange/elasticbuilder)
 [![Latest Unstable Version](https://poser.pugx.org/brokerexchange/elasticbuilder/v/unstable)](https://packagist.org/packages/brokerexchange/elasticbuilder)
 [![Total Downloads](https://poser.pugx.org/brokerexchange/elasticbuilder/downloads)](https://packagist.org/packages/brokerexchange/elasticbuilder)
 [![License](https://poser.pugx.org/brokerexchange/elasticbuilder/license)](https://packagist.org/packages/brokerexchange/elasticbuilder)
