@@ -415,4 +415,25 @@ class ElasticBuilder
         ];
     }
 
+    /**
+     * @param $query
+     * @return array
+     */
+    public function not($query)
+    {
+        return [
+            'not' => $query
+        ];
+    }
+
+//    public function and($queries)
+//    {
+//
+//    }
+//
+//    public function or($queries)
+//    {
+//
+//    }
+
 }

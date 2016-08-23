@@ -155,9 +155,9 @@ abstract class Query
      * @param $agg
      * @return $this
      */
-    public function aggregate($agg)
+    public function aggregate(Array $agg)
     {
-        $this->aggregations = $agg;
+        array_merge($this->aggregations,$agg);
         return $this;
     }
 
