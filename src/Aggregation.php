@@ -31,7 +31,7 @@ class Aggregation
                 'terms' => [
                     'field' => $field,
                     'size' => $size,
-                    'orderby' => $orderBy
+                    'order' => $orderBy
                 ]
             ]
         ];
