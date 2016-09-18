@@ -24,15 +24,21 @@ class Aggregation
      * @param array $order
      * @return array
      */
-    public function terms($namespace,$field,$size=10,$order=[])
+    public function terms($namespace,$field,$size=10,$order=null)
     {
+        $terms = [
+            'field' => $field,
+            'size' => $size
+        ];
+
+        if(!empty($order))
+        {
+            array_merge($terms,['order' => $order]);
+        }
+
         return [
             $namespace => [
-                'terms' => [
-                    'field' => $field,
-                    'size' => $size,
-                    'order' => $order
-                ]
+                'terms' => $terms
             ]
         ];
     }
