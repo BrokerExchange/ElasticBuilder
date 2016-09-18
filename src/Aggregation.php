@@ -21,17 +21,17 @@ class Aggregation
      * @param $namespace
      * @param $field
      * @param int $size
-     * @param array $orderBy
+     * @param array $order
      * @return array
      */
-    public function terms($namespace,$field,$size=10,$orderBy=[])
+    public function terms($namespace,$field,$size=10,$order=[])
     {
         return [
             $namespace => [
                 'terms' => [
                     'field' => $field,
                     'size' => $size,
-                    'order' => $orderBy
+                    'order' => $order
                 ]
             ]
         ];
