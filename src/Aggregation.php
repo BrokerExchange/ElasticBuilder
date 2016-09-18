@@ -20,14 +20,16 @@ class Aggregation
     /**
      * @param $namespace
      * @param $field
+     * @param int $size
      * @return array
      */
-    public function terms($namespace,$field)
+    public function terms($namespace,$field,$size=10)
     {
         return [
             $namespace => [
                 'terms' => [
-                    'field' => $field
+                    'field' => $field,
+                    'size' => $size
                 ]
             ]
         ];
