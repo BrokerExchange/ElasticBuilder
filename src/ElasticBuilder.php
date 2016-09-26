@@ -131,10 +131,10 @@ class ElasticBuilder
                     'operator' => $operator,
                     'type' => $type,
                     'analyzer' => $analyzer,
-                    'minimum_should_match' => $minimum
+                    'minimum_should_match' => $minimum,
+                    'boost' => $boost
 
-                ],
-                'boost' => $boost
+                ]
             ]
         ];
     }
