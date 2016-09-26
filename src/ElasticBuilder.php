@@ -120,9 +120,10 @@ class ElasticBuilder
      * @param int $minimum
      * @param int $boost
      * @param string $analyzer
+     * @param int $fuzziness
      * @return array
      */
-    public function match($field,$query,$operator='or',$type='boolean',$minimum=1,$boost=1,$analyzer='standard')
+    public function match($field,$query,$operator='or',$type='boolean',$minimum=1,$boost=1,$analyzer='standard',$fuzziness=0)
     {
         return [
             'match' => [
@@ -132,7 +133,8 @@ class ElasticBuilder
                     'type' => $type,
                     'analyzer' => $analyzer,
                     'minimum_should_match' => $minimum,
-                    'boost' => $boost
+                    'boost' => $boost,
+                    'fuzziness' => $fuzziness
 
                 ]
             ]
@@ -147,9 +149,10 @@ class ElasticBuilder
      * @param int $minimum
      * @param int $boost
      * @param string $analyzer
+     * @param int $fuzziness
      * @return array
      */
-    public function multi_match($fields=[],$query,$operator='or',$type='cross_match',$minimum=1,$boost=1,$analyzer='standard')
+    public function multi_match($fields=[],$query,$operator='or',$type='cross_match',$minimum=1,$boost=1,$analyzer='standard',$fuzziness=0)
     {
         return [
             'multi_match' => [
@@ -159,7 +162,8 @@ class ElasticBuilder
                 'operator' => $operator,
                 'minimum_should_match' => $minimum,
                 'analyzer' => $analyzer,
-                'boost' => $boost
+                'boost' => $boost,
+                'fuzziness' => $fuzziness
             ]
         ];
     }
