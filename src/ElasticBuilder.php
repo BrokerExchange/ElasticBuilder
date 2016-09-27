@@ -32,7 +32,7 @@ class ElasticBuilder
     /**
      * @param int $boost
      * @param int $minimum_should_match
-     * @return Boolean
+     * @return Query\Boolean
      */
     public function boolean($boost=1,$minimum_should_match=1)
     {
@@ -436,15 +436,5 @@ class ElasticBuilder
             'not' => $query
         ];
     }
-
-//    public function and($queries)
-//    {
-//
-//    }
-//
-//    public function or($queries)
-//    {
-//
-//    }
 
 }

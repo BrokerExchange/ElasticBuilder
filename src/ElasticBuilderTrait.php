@@ -24,17 +24,10 @@ trait ElasticBuilderTrait
     /**
      * @param int $boost
      * @param int $minimum_should_match
-     * @return Boolean
+     * @return Query\Boolean
      */
     public function boolean($boost=1,$minimum_should_match=1)
     {
-
-        if(array_search('Elasticquent\ElasticquentTrait',class_uses($this))) {
-            $query = new Boolean($boost, $minimum_should_match);
-            $query->setModel($this);
-            return $query;
-        }
-
         return new Boolean($boost,$minimum_should_match);
     }
 
@@ -44,12 +37,6 @@ trait ElasticBuilderTrait
      */
     public function dis_max($boost=1)
     {
-        if(array_search('Elasticquent\ElasticquentTrait',class_uses($this))) {
-            $query = new DisMax($boost);
-            $query->setModel($this);
-            return $query;
-        }
-
         return new DisMax($boost);
     }
 
@@ -67,14 +54,6 @@ trait ElasticBuilderTrait
      */
     public function boosting($negative_boost=1)
     {
-        if(array_search('Elasticquent\ElasticquentTrait',class_uses($this))) {
-            $query = new Boosting($negative_boost);
-            $query->setIndex($this->getIndexName());
-            $query->setType($this->getTypeName());
-            $query->setModel($this);
-            return $query;
-        }
-
         return new Boosting($negative_boost);
     }
 
@@ -84,14 +63,6 @@ trait ElasticBuilderTrait
      */
     public function constant_score($boost=1)
     {
-        if(array_search('Elasticquent\ElasticquentTrait',class_uses($this))) {
-            $query = new ConstantScore($boost);
-            $query->setIndex($this->getIndexName());
-            $query->setType($this->getTypeName());
-            $query->setModel($this);
-            return $query;
-        }
-
         return new ConstantScore($boost);
     }
 }
