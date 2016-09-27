@@ -389,13 +389,20 @@ class ElasticBuilder
      */
     public function gauss($field,$origin,$offset,$scale,$weight=1)
     {
+
+        $args = [
+            'origin' => $origin,
+            'scale' => $scale
+        ];
+
+        if(!empty($offset))
+        {
+            $args = array_merge($args,['offset'=>$offset]);
+        }
+
         return [
             'gauss' => [
-                $field => [
-                    'origin' => $origin,
-                    'offset' => $offset,
-                    'scale' => $scale
-                ]
+                $field => $args
             ],
             'weight' => $weight
         ];
