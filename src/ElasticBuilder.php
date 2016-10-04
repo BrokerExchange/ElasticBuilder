@@ -152,20 +152,22 @@ class ElasticBuilder
      * @param int $fuzziness
      * @return array
      */
-    public function multi_match($fields=[],$query,$operator='or',$type='cross_match',$minimum=1,$boost=1,$analyzer='standard',$fuzziness=0)
+    public function multi_match($fields=[],$query,$operator='or',$type='cross_match',$minimum=1,$boost=1,$analyzer=null,$fuzziness=null)
     {
-        return [
+        $params = [
             'multi_match' => [
                 'query' => $query,
                 'type' => $type,
                 'fields' => $fields,
                 'operator' => $operator,
                 'minimum_should_match' => $minimum,
-                'analyzer' => $analyzer,
                 'boost' => $boost,
-                'fuzziness' => $fuzziness
             ]
         ];
+
+        $params['multi_match'] = array_merge($params['multi_match'],array_filter(['analyzer' => $analyzer, 'fuzziness' => $fuzziness]));
+
+        return $params;
     }
 
     /**
