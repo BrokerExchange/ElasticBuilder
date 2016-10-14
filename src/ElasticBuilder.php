@@ -129,26 +129,21 @@ class ElasticBuilder
     public function match($field,$query,$operator='or',$type='boolean',$minimum=null,$boost=null,$analyzer='',$fuzziness=null)
     {
 
-        $optional = array_filter([
-            'analyzer' => $analyzer,
-            'minimum_should_match' => $minimum,
-            'boost' => $boost,
-            'fuzziness' => $fuzziness
-        ]);
-
-        $query = [
+        $params = [
             'match' => [
-                $field => [
+                $field => array_filter([
                     'query' => $query,
                     'operator' => $operator,
                     'type' => $type,
-                ]
+                    'analyzer' => $analyzer,
+                    'minimum_should_match' => $minimum,
+                    'boost' => $boost,
+                    'fuzziness' => $fuzziness
+                ])
             ]
         ];
 
-        $query['match'][$field] = array_merge($optional,$query['match'][$field]);
-
-        return $query;
+        return $params;
     }
 
     /**
@@ -165,23 +160,18 @@ class ElasticBuilder
     public function multi_match($fields=[],$query,$operator='or',$type='cross_match',$minimum=null,$boost=null,$analyzer='',$fuzziness=null)
     {
 
-        $optional = array_filter([
-            'analyzer' => $analyzer,
-            'minimum_should_match' => $minimum,
-            'fuzziness' => $fuzziness,
-            'boost' => $boost,
-        ]);
-
         $params = [
-            'multi_match' => [
+            'multi_match' => array_filter([
                 'query' => $query,
                 'type' => $type,
                 'fields' => $fields,
                 'operator' => $operator,
-            ]
+                'analyzer' => $analyzer,
+                'minimum_should_match' => $minimum,
+                'fuzziness' => $fuzziness,
+                'boost' => $boost,
+            ])
         ];
-
-        $params['multi_match'] = array_merge($params['multi_match'],$optional);
 
         return $params;
     }

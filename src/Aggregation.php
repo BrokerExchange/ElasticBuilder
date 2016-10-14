@@ -370,7 +370,7 @@ class Aggregation
      * @param null $missing
      * @return array
      */
-    public function histogram($namespace,$field,$interval,$minimum_doc_count=null,$order=['_key'=>'asc'],$offset=0,$keyed=null,$missing=null)
+    public function histogram($namespace,$field,$interval,$order=['_key'=>'asc'],$offset=0,$keyed=null,$missing=null)
     {
 
         return [
