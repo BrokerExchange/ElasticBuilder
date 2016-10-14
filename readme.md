@@ -112,28 +112,6 @@ Bool query with aggregation as eloquent model trait
 ```
 
 
-### Extending A Query Class
-
-Any of the simply extend one of the query classes ... in this case Boolean
-
-```php
-<?php
-use ElasticBuilder\Query\Boolean;
-use ElasticBuilder\Eb;
-use Carbon\Carbon;
-
-class ArticleQuery extends Boolean
-{
-     private function published()
-     {
-         $filter = Eb::range('published_at',['lte' => Carbon::now()->toIso8601String()]);
-         
-         $this->filter($filter);
-     }
-}
-```
-
-
 ```php
 <?php
 if($this->request->has('search')){
