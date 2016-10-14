@@ -100,10 +100,13 @@ class ElasticBuilder
      * @param int $boost
      * @return array
      */
-    public function range($field,$ranges=[],$boost=1)
+    public function range($field,$ranges=[],$boost=null)
     {
         
-        $ranges = array_merge($ranges,['boost'=>$boost]);
+        if(!is_null($boost))
+        {
+            $ranges = array_merge($ranges,['boost'=>$boost]);
+        }
         
         return [
             'range' => [
