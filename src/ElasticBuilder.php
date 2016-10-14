@@ -126,22 +126,29 @@ class ElasticBuilder
      * @param int $fuzziness
      * @return array
      */
-    public function match($field,$query,$operator='or',$type='boolean',$minimum=1,$boost=1,$analyzer='standard',$fuzziness=0)
+    public function match($field,$query,$operator='or',$type='boolean',$minimum=null,$boost=null,$analyzer='',$fuzziness=null)
     {
-        return [
+
+        $optional = array_filter([
+            'analyzer' => $analyzer,
+            'minimum_should_match' => $minimum,
+            'boost' => $boost,
+            'fuzziness' => $fuzziness
+        ]);
+
+        $query = [
             'match' => [
                 $field => [
                     'query' => $query,
                     'operator' => $operator,
                     'type' => $type,
-                    'analyzer' => $analyzer,
-                    'minimum_should_match' => $minimum,
-                    'boost' => $boost,
-                    'fuzziness' => $fuzziness
-
                 ]
             ]
         ];
+
+        $query['match'][$field] = array_merge($optional,$query['match'][$field]);
+
+        return $query;
     }
 
     /**
