@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Created by PhpStorm.
+ * User: brian@brokerbin.com, jpage@brokerbin.com
+ * Date: 6/8/16
+ * Time: 8:17 PM
+ * License: The MIT License (MIT)
+ * Copyright: (c) <Broker Exchange Network>
+ */
+
 namespace ElasticBuilder;
 
 use Illuminate\Support\ServiceProvider;

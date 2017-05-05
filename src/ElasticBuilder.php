@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Created by PhpStorm.
+ * User: brian@brokerbin.com, jpage@brokerbin.com
+ * Date: 6/8/16
+ * Time: 8:17 PM
+ * License: The MIT License (MIT)
+ * Copyright: (c) <Broker Exchange Network>
+ */
+
 namespace ElasticBuilder;
 
 use ElasticBuilder\Query\Boolean;
@@ -46,7 +55,7 @@ class ElasticBuilder
      * @param int $minimum_should_match
      * @return Query\Boolean
      */
-    public function boolean($boost=1,$minimum_should_match)
+    public function boolean($boost=1,$minimum_should_match=1)
     {
         return new Boolean($boost,$minimum_should_match);
     }
