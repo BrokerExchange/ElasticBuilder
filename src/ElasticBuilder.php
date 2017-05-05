@@ -476,9 +476,9 @@ class ElasticBuilder
             $search = $this->elastic->search($query);
             return $search;
 
-        }catch(MyException $e)
+        }catch(Exception $e)
         {
-            var_dump($e);
+            \Log::info($e);
         }
     }
 
