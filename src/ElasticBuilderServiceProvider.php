@@ -1,19 +1,19 @@
 <?php
+
 /**
  * Created by PhpStorm.
- * User: brian@brokerbin.com
+ * User: brian@brokerbin.com, jpage@brokerbin.com
  * Date: 6/8/16
- * Time: 1:59 PM
+ * Time: 8:17 PM
  * License: The MIT License (MIT)
  * Copyright: (c) <Broker Exchange Network>
  */
 
-
 namespace ElasticBuilder;
 
-use ElasticBuilder\Query\Boolean;
-use ElasticBuilder\Query\DisMax;
 use Illuminate\Support\ServiceProvider;
+use Elasticsearch\ClientBuilder as Builder;
+
 
 class ElasticBuilderServiceProvider extends ServiceProvider
 {
@@ -34,10 +34,13 @@ class ElasticBuilderServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // boolean query class
-        $this->app->singleton('elasticbuilder', function () {
-            return new ElasticBuilder;
+        $this->app->bind('elasticbuilder', function() {
+            return new ElasticBuilder(Builder::create()
+                ->setHosts(config('eb.elasticsearch.hosts'))
+                ->build(),
+                config('eb.elasticsearch.index')
+            );
         });
-        
+
     }
 }

@@ -1,7 +1,8 @@
 <?php
+
 /**
  * Created by PhpStorm.
- * User: brian@brokerbin.com
+ * User: brian@brokerbin.com, jpage@brokerbin.com
  * Date: 6/8/16
  * Time: 8:17 PM
  * License: The MIT License (MIT)
@@ -15,12 +16,32 @@ use ElasticBuilder\Query\Boosting;
 use ElasticBuilder\Query\DisMax;
 use ElasticBuilder\Query\ConstantScore;
 
+use Elasticsearch\Client as Elastic;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as BaseCollection;
+
+
+
 /**
  * Class ElasticBuilder
  * @package ElasticBuilder
  */
 class ElasticBuilder
 {
+
+    /**
+     * Create a new engine instance.
+     *
+     * @param  \Elasticsearch\Client  $elastic
+     * @return void
+     */
+    public function __construct(Elastic $elastic, $index)
+    {
+        $this->elastic = $elastic;
+        $this->index = $index;
+    }
+
+
     /**
      * @return Aggregation
      */
@@ -102,12 +123,12 @@ class ElasticBuilder
      */
     public function range($field,$ranges=[],$boost=null)
     {
-        
+
         if(!is_null($boost))
         {
             $ranges = array_merge($ranges,['boost'=>$boost]);
         }
-        
+
         return [
             'range' => [
                 $field => $ranges
@@ -130,6 +151,7 @@ class ElasticBuilder
     {
 
         $params = [
+
             'match' => [
                 $field => array_filter([
                     'query' => $query,
@@ -157,10 +179,11 @@ class ElasticBuilder
      * @param int $fuzziness
      * @return array
      */
-    public function multi_match($fields=[],$query,$operator='or',$type='cross_match',$minimum=null,$boost=null,$analyzer='',$fuzziness=null)
+    public function multi_match($fields=[],$query,$operator='or',$type=null,$minimum=null,$boost=null,$analyzer='',$fuzziness=null)
     {
 
         $params = [
+
             'multi_match' => array_filter([
                 'query' => $query,
                 'type' => $type,
@@ -374,6 +397,7 @@ class ElasticBuilder
     }
 
 
+
     /**
      * @param array $functions
      * @return array
@@ -435,14 +459,28 @@ class ElasticBuilder
     }
 
     /**
-     * @param $query
+     * @param $params
+     * @param $type
      * @return array
      */
-    public function not($query)
+    public function search($params, $type)
     {
-        return [
-            'not' => $query
+        $query = [
+            'index' => $this->index,
+            'type' => $type,
+            'body' => [
+                'query' =>  $params
+            ]
         ];
+        try{
+            $search = $this->elastic->search($query);
+            return $search;
+
+        }catch(Exception $e)
+        {
+            \Log::info($e);
+        }
     }
+
 
 }
