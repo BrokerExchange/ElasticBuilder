@@ -1,6 +1,6 @@
 {
   "name": "brokerexchange/elasticbuilder",
-  "description": "Query DSL Builder for Elasticsearch.",
+  "description": "Query Builder for Elasticsearch.",
   "keywords": [
     "elasticsearch",
     "eloquent",
