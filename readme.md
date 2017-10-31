@@ -9,7 +9,7 @@
 
 _Query DSL Builder for Elasticsearch queries_
 
-Use ElasticBuilder to easily combine multiple queries/filters/aggregations into Elasticsearch Query DSL within Laravel projects!
+Use ElasticBuilder to combine multiple queries/filters/aggregations into Elasticsearch Query DSL within Laravel projects!
 
 ## License
 
