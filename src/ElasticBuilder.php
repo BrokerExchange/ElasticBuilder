@@ -147,18 +147,15 @@ class ElasticBuilder
      * @param int $fuzziness
      * @return array
      */
-    public function match($field,$query,$operator='or',$type='boolean',$minimum=null,$boost=null,$analyzer='',$fuzziness=null)
+    public function match($field,$query,$boost=null,$analyzer='',$fuzziness=null)
     {
 
         $params = [
 
-            'match' => [
+            'match_phrase_prefix' => [
                 $field => array_filter([
                     'query' => $query,
-                    'operator' => $operator,
-                    'type' => $type,
                     'analyzer' => $analyzer,
-                    'minimum_should_match' => $minimum,
                     'boost' => $boost,
                     'fuzziness' => $fuzziness
                 ])
