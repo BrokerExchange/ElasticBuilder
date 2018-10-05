@@ -17,7 +17,7 @@ ElasticBuilder is released under the MIT Open Source License, <https://opensourc
 
 ## Copyright
 
-ElasticBuilder &copy; Broker Exchange Network
+ElasticBuilder &copy; Broker Exchange Network 2018
 
 ## Overview 
 
