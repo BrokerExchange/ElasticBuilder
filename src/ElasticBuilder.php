@@ -140,22 +140,23 @@ class ElasticBuilder
      * @param $field
      * @param $query
      * @param string $operator
-     * @param string $type
      * @param int $minimum
      * @param int $boost
      * @param string $analyzer
      * @param int $fuzziness
      * @return array
      */
-    public function match($field,$query,$boost=null,$analyzer='',$fuzziness=null)
+    public function match($field,$query,$operator='or',$minimum=null,$boost=null,$analyzer='',$fuzziness=null)
     {
 
         $params = [
 
-            'match_phrase_prefix' => [
+            'match' => [
                 $field => array_filter([
                     'query' => $query,
+                    'operator' => $operator,
                     'analyzer' => $analyzer,
+                    'minimum_should_match' => $minimum,
                     'boost' => $boost,
                     'fuzziness' => $fuzziness
                 ])
@@ -169,21 +170,19 @@ class ElasticBuilder
      * @param array $fields
      * @param $query
      * @param string $operator
-     * @param string $type
      * @param int $minimum
      * @param int $boost
      * @param string $analyzer
      * @param int $fuzziness
      * @return array
      */
-    public function multi_match($fields=[],$query,$operator='or',$type=null,$minimum=null,$boost=null,$analyzer='',$fuzziness=null)
+    public function multi_match($fields=[],$query,$operator='or',$minimum=null,$boost=null,$analyzer='',$fuzziness=null)
     {
 
         $params = [
 
             'multi_match' => array_filter([
                 'query' => $query,
-                'type' => $type,
                 'fields' => $fields,
                 'operator' => $operator,
                 'analyzer' => $analyzer,
