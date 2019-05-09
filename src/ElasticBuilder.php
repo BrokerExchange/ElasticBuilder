@@ -28,16 +28,48 @@ use Illuminate\Support\Collection as BaseCollection;
  */
 class ElasticBuilder
 {
+    /**
+     * @var Elastic
+     */
+    public $elastic;
+
+    /**
+     * @var
+     */
+    public $index;
+
+    /**
+     * @var string specify the handler used by \Elastic\Client
+     */
+    protected $handler;
+
+    /**
+     * @var array the client parameters to be used by the client handler
+     */
+    private $client = [];
+
+    /**
+     * @var int the offset of the results window
+     */
+    private $from = 0;
+
+    /**
+     * @var int the size of the results window
+     */
+    private $size = 10;
 
     /**
      * Create a new engine instance.
      *
-     * @param  \Elasticsearch\Client  $elastic
+     * @param \Elasticsearch\Client $elastic
+     * @param string $index
+     * @param string $handler the handler
      * @return void
      */
-    public function __construct(Elastic $elastic, $index)
+    public function __construct(Elastic $elastic, $index, $handler = 'curl')
     {
         $this->elastic = $elastic;
+        $this->handler = $handler;
         $this->index = $index;
     }
 
@@ -481,19 +513,112 @@ class ElasticBuilder
     }
 
     /**
+     * Set the offset of the results window
+     *
+     * @param int $offset the offset of the results window
+     */
+    public function from($offset = 0)
+    {
+
+        if (is_integer($offset)) {
+
+            $this->from = $offset;
+
+        }
+
+    }
+
+    /**
+     * Set the result window size
+     *
+     * @param int $hits the number of hits in the results window
+     */
+    public function size($hits = 10)
+    {
+
+        if (is_integer($hits)) {
+
+            $this->size = $hits;
+
+        }
+
+    }
+
+    /**
+     * Set the client parameters
+     *
+     * @param array $client
+     */
+    public function client_parameters($client = [])
+    {
+
+        if ($this->handler == 'curl') {
+
+            if (empty($client)) {
+
+                $this->client = [
+                    'curl' => [
+                        CURLOPT_HTTPHEADER => [
+                            'Content-type: application/json'
+                        ]
+                    ]
+                ];
+
+            } else {
+                if (!empty($client)) {
+
+                    $this->client = $client;
+
+                    $needs_content_type = true;
+
+                    if (!empty($this->client['curl'][CURLOPT_HTTPHEADER]) && is_array($this->client['curl'][CURLOPT_HTTPHEADER])) {
+
+                        foreach ($this->client['curl'][CURLOPT_HTTPHEADER] as $headerParameter) {
+
+                            if (strpos(strtolower($headerParameter), 'content-type:') !== false) {
+                                $needs_content_type = false;
+                                continue;
+                            }
+
+                        }
+
+                    }
+
+                    if ($needs_content_type === true) {
+
+                        $this->client['curl'][CURLOPT_HTTPHEADER][] = 'Content-type: application/json';
+
+                    }
+                }
+            }
+        } //allow for custom client parameters on non-curl handlers
+        else {
+            if (!empty($client) && is_array($client)) {
+
+                $query['client'] = $client;
+            }
+        }
+    }
+
+    /**
      * @param $params
      * @param $type
      * @return array
      */
     public function search($params, $type)
     {
+
         $query = [
             'index' => $this->index,
             'type' => $type,
+            'from' => $this->from,
+            'size' => $this->size,
+            'client' => $this->client,
             'body' => [
                 'query' =>  $params
             ]
         ];
+
         try{
             $search = $this->elastic->search($query);
             return $search;
