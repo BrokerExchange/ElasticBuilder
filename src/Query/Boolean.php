@@ -38,6 +38,16 @@ class Boolean extends Query
     }
 
     /**
+     * @param $query
+     * @return $this
+     */
+    public function must_not($query)
+    {
+        $this->query['bool']['must_not'][] = $query;
+        return $this;
+    }
+
+    /**
      * @param $filter
      * @return $this
      */
