@@ -61,7 +61,7 @@ class ElasticBuilder
     /**
      * Create a new engine instance.
      *
-     * @param  \Elasticsearch\Client  $elastic
+     * @param \Elasticsearch\Client $elastic
      * @param string $index
      * @param string $handler the handler
      * @return void
@@ -517,7 +517,8 @@ class ElasticBuilder
      *
      * @param int $offset the offset of the results window
      */
-    public function from($offset = 0){
+    public function from($offset = 0)
+    {
 
         if (is_integer($offset)) {
 
@@ -532,9 +533,10 @@ class ElasticBuilder
      *
      * @param int $hits the number of hits in the results window
      */
-    public function size($hits = 10){
+    public function size($hits = 10)
+    {
 
-        if (is_integer($hits)){
+        if (is_integer($hits)) {
 
             $this->size = $hits;
 
@@ -547,9 +549,10 @@ class ElasticBuilder
      *
      * @param array $client
      */
-    public function client_parameters($client = []){
+    public function client_parameters($client = [])
+    {
 
-        if($this->handler == 'curl') {
+        if ($this->handler == 'curl') {
 
             if (empty($client)) {
 
@@ -561,37 +564,39 @@ class ElasticBuilder
                     ]
                 ];
 
-            } else if (!empty($client)) {
+            } else {
+                if (!empty($client)) {
 
-                $this->client = $client;
+                    $this->client = $client;
 
-                $needs_content_type = true;
+                    $needs_content_type = true;
 
-                if(!empty($this->client['curl'][CURLOPT_HTTPHEADER]) && is_array($this->client['curl'][CURLOPT_HTTPHEADER])){
+                    if (!empty($this->client['curl'][CURLOPT_HTTPHEADER]) && is_array($this->client['curl'][CURLOPT_HTTPHEADER])) {
 
-                    foreach($this->client['curl'][CURLOPT_HTTPHEADER] as $headerParameter){
+                        foreach ($this->client['curl'][CURLOPT_HTTPHEADER] as $headerParameter) {
 
-                        if (strpos(strtolower($headerParameter), 'content-type:') !== false) {
-                            $needs_content_type = false;
-                            continue;
+                            if (strpos(strtolower($headerParameter), 'content-type:') !== false) {
+                                $needs_content_type = false;
+                                continue;
+                            }
+
                         }
 
                     }
 
-                }
+                    if ($needs_content_type === true) {
 
-                if ( $needs_content_type === true ) {
+                        $this->client['curl'][CURLOPT_HTTPHEADER][] = 'Content-type: application/json';
 
-                    $this->client['curl'][CURLOPT_HTTPHEADER][] = 'Content-type: application/json';
-
+                    }
                 }
             }
-        }
+        } //allow for custom client parameters on non-curl handlers
+        else {
+            if (!empty($client) && is_array($client)) {
 
-        //allow for custom client parameters on non-curl handlers
-        else if (!empty($client) && is_array($client)) {
-
-            $query['client'] = $client;
+                $query['client'] = $client;
+            }
         }
     }
 
