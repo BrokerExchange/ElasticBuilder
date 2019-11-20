@@ -412,9 +412,9 @@ class Aggregation
         return [
             $namespace => [
                 'nested' => [
-                    'path' => $path,
-                    'aggs' => $aggs
-                ]
+                    'path' => $path
+                ],
+                'aggs' => $aggs
             ]
         ];
     }
