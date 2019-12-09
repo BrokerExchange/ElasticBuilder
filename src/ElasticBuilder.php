@@ -83,7 +83,7 @@ class ElasticBuilder
     }
 
     /**
-     * @param int $boost
+     * @param int|float $boost
      * @param int $minimum_should_match
      * @return Query\Boolean
      */
@@ -93,7 +93,7 @@ class ElasticBuilder
     }
 
     /**
-     * @param int $boost
+     * @param int|float $boost
      * @return DisMax
      */
     public function dis_max($boost=1)
@@ -102,7 +102,7 @@ class ElasticBuilder
     }
 
     /**
-     * @param int $boost
+     * @param int|float $boost
      * @return ConstantScore
      */
     public function constant_score($boost=1)
@@ -111,7 +111,7 @@ class ElasticBuilder
     }
 
     /**
-     * @param int $negative_boost
+     * @param int|float $negative_boost
      * @return Boosting
      */
     public function boosting($negative_boost=1)
@@ -122,15 +122,29 @@ class ElasticBuilder
     /**
      * @param $field
      * @param $value
+     * @param int|float $boost
      * @return array
      */
-    public function term($field,$value)
+    public function term($field,$value,$boost=null)
     {
+        if(!is_null($boost))
+        {
+            return [
+                'term' => [
+                    $field => [
+                        'value' => $value,
+                        'boost' => $boost
+                    ]
+                ]
+            ];
+        }
+
         return [
             'term' => [
                 $field => $value
             ]
         ];
+        
     }
 
     /**
@@ -150,7 +164,7 @@ class ElasticBuilder
     /**
      * @param $field
      * @param array $ranges
-     * @param int $boost
+     * @param int|float $boost
      * @return array
      */
     public function range($field,$ranges=[],$boost=null)
@@ -173,7 +187,7 @@ class ElasticBuilder
      * @param $query
      * @param string $operator
      * @param int $minimum
-     * @param int $boost
+     * @param int|float $boost
      * @param string $analyzer
      * @param int $fuzziness
      * @return array
@@ -204,7 +218,7 @@ class ElasticBuilder
      * @param string $operator
      * @param string $type
      * @param int $minimum
-     * @param int $boost
+     * @param int|float $boost
      * @param string $analyzer
      * @param int $fuzziness
      * @return array
@@ -232,7 +246,7 @@ class ElasticBuilder
     /**
      * @param $field
      * @param $query
-     * @param int $boost
+     * @param int|float $boost
      * @param string $analyzer
      * @param int $fuzziness
      * @return array
@@ -266,7 +280,7 @@ class ElasticBuilder
     /**
      * @param $field
      * @param $value
-     * @param int $boost
+     * @param int|float $boost
      * @param float $cuttoff
      * @param string $low_freq_operator
      * @param string $high_freq_operator
@@ -318,7 +332,7 @@ class ElasticBuilder
     /**
      * @param $field
      * @param $value
-     * @param int $boost
+     * @param int|float $boost
      * @return array
      */
     public function prefix($field,$value,$boost=1)
@@ -336,7 +350,7 @@ class ElasticBuilder
     /**
      * @param $field
      * @param $value
-     * @param int $boost
+     * @param int|float $boost
      * @param string $fuzziness
      * @param int $prefix_length
      * @param int $max_exp
