@@ -14,6 +14,7 @@ use ElasticBuilder\Query\Boolean;
 use ElasticBuilder\Query\Boosting;
 use ElasticBuilder\Query\ConstantScore;
 use ElasticBuilder\Query\DisMax;
+use ElasticBuilder\Query\FunctionScore;
 
 /**
  * Class ElasticBuilderTrait
@@ -64,5 +65,17 @@ trait ElasticBuilderTrait
     public function constant_score($boost=1)
     {
         return new ConstantScore($boost);
+    }
+    
+    /**
+     * @param int|float|null $boost
+     * @param int|float|null $max_boost
+     * @param string $boost_mode
+     * @param int|float|null $min_score
+     * @param string $score_mode
+     * @return FunctionScore
+     */
+    public function function_score($boost=null,$max_boost=null,$boost_mode='multiply',$min_score=null,$score_mode='multiply'){
+        return new FunctionScore($boost,$max_boost,$boost_mode,$min_score,$score_mode);
     }
 }
