@@ -15,6 +15,7 @@ use ElasticBuilder\Query\Boolean;
 use ElasticBuilder\Query\Boosting;
 use ElasticBuilder\Query\DisMax;
 use ElasticBuilder\Query\ConstantScore;
+use ElasticBuilder\Query\FunctionScore;
 
 use Elasticsearch\Client as Elastic;
 use Illuminate\Database\Eloquent\Collection;
@@ -109,6 +110,18 @@ class ElasticBuilder
     {
         return new ConstantScore($boost);
     }
+    
+    /**
+     * @param int|float|null $boost
+     * @param int|float|null $max_boost
+     * @param string $boost_mode
+     * @param int|float|null $min_score
+     * @param string $score_mode
+     * @return FunctionScore
+     */
+    public function function_score(){
+        return new FunctionScore($boost=null,$max_boost=null,$boost_mode='multiply',$min_score=null,$score_mode='multiply');
+    }
 
     /**
      * @param int|float $negative_boost
@@ -122,7 +135,7 @@ class ElasticBuilder
     /**
      * @param $field
      * @param $value
-     * @param int|float $boost
+     * @param int|float|null $boost
      * @return array
      */
     public function term($field,$value,$boost=null)
@@ -164,7 +177,7 @@ class ElasticBuilder
     /**
      * @param $field
      * @param array $ranges
-     * @param int|float $boost
+     * @param int|float|null $boost
      * @return array
      */
     public function range($field,$ranges=[],$boost=null)
@@ -187,7 +200,7 @@ class ElasticBuilder
      * @param $query
      * @param string $operator
      * @param int $minimum
-     * @param int|float $boost
+     * @param int|float|null $boost
      * @param string $analyzer
      * @param int $fuzziness
      * @return array
@@ -218,7 +231,7 @@ class ElasticBuilder
      * @param string $operator
      * @param string $type
      * @param int $minimum
-     * @param int|float $boost
+     * @param int|float|null $boost
      * @param string $analyzer
      * @param int $fuzziness
      * @return array
@@ -246,7 +259,7 @@ class ElasticBuilder
     /**
      * @param $field
      * @param $query
-     * @param int|float $boost
+     * @param int|float|null $boost
      * @param string $analyzer
      * @param int $fuzziness
      * @return array
@@ -462,21 +475,6 @@ class ElasticBuilder
         ];
 
         return $query;
-    }
-
-
-
-    /**
-     * @param array $functions
-     * @return array
-     */
-    public function function_score($functions=[])
-    {
-        return [
-            'function_score' => [
-                'functions' => $functions
-            ]
-        ];
     }
 
     /**

@@ -16,7 +16,7 @@ class ConstantScore extends Query
 {
     /**
      * ConstantScore constructor.
-     * @param int $boost
+     * @param int|float|null $boost
      */
     public function __construct($boost=1)
     {
