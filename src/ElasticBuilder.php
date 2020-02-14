@@ -523,6 +523,99 @@ class ElasticBuilder
             ]
         ];
     }
+    
+    /**
+     * @param string $field the name of the property-field with the location data
+     * @param string $distance the length and units used to create the radius
+     * @param array|string $origin the location data of the point of origin where the radius begins (center)
+     * @param string $distance_type what method is used to determine distance between points (ex: arc, plane)
+     * @param string $origin_format how to build the field data in the request (ex: array,geohash,properties,string)
+     * @param string $name optional name used to identify the query
+     * @param string $validation_method determine how points are considered valid (ex: COERCE,IGNORE_MALFORMED,STRICT)
+     * @return array
+     */
+    public function geo_distance($field,$distance,$origin,$distance_type='arc',$origin_format='array',$name='',$validation_method='STRICT'){
+
+        switch(strtolower($origin_format)){
+
+            case 'properties': {
+                $origin_formatted =[
+                    'lat' => $origin['lat'],
+                    'lon' => $origin['lon']
+                ];
+                break;
+            }
+            case 'geohash':
+                //note: for geohash -- origin string must be passed as "geohash"
+
+                //no break
+            case 'string': {
+                //note: for string -- origin string must be passed as "lat,lon"
+
+                $origin_formatted = $origin;
+
+                break;
+            }
+            case 'array':
+                //no break
+            default: {
+                $origin_formatted = [
+                    (double) $origin['lon'],
+                    (double) $origin['lat']
+                ];
+                break;
+            }
+        }
+
+        $distance_type = strtolower($distance_type);
+
+        switch($distance_type){
+            case 'arc':
+                //no break
+            case 'plane': {
+                //do nothing
+                break;
+            }
+            default: {
+                //reset to 'arc' if unnavailable option is sent
+                $distance_type = 'arc';
+                break;
+            }
+        }
+
+        $validation_method = strtoupper($validation_method);
+
+        switch($validation_method){
+            case 'COERCE':
+                //no break
+            case 'IGNORE_MALFORMED':
+                //no break
+            case 'STRICT': {
+                //do nothing
+                break;
+            }
+            default: {
+                //reset to 'arc' if unnavailable option is sent
+                $validation_method = 'STRICT';
+                break;
+            }
+        }
+
+        $geo_distance = [
+            'geo_distance'=> [
+                'distance' => $distance,
+                'distance_type' => $distance_type,
+                "{$field}" => $origin_formatted,
+                'validation_method' => $validation_method
+            ]
+        ];
+
+        if(!empty($name)){
+            $geo_distance['geo_distance']['_name'] = $name;
+        }
+
+        return $geo_distance;
+    }
 
     /**
      * Set the offset of the results window
