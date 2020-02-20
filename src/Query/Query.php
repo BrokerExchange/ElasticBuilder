@@ -17,14 +17,19 @@ namespace ElasticBuilder\Query;
 abstract class Query
 {
     /**
-     * @var
+     * @var array aggregations to execute along with the query
      */
-    protected $aggregations = []; //aggregations to execute along with the query
+    protected $aggregations = [];
 
     /**
-     * @var array
+     * @var array sorts to be passed along with the query
      */
-    protected $query; // the full query ... it's a bool
+    protected $sorts = [];
+
+    /**
+     * @var array the full query ... it's a bool
+     */
+    protected $query;
 
     /**
      * @var
@@ -46,6 +51,14 @@ abstract class Query
     {
         return $this->aggregations;
     }
+    
+    /**
+     * @return mixed
+     */
+    public function sorts()
+    {
+        return $this->sorts;
+    }
 
     /**
      * @param $agg
@@ -57,6 +70,16 @@ abstract class Query
         return $this;
     }
 
+    /**
+     * @param $sort
+     * @return $this
+     */
+    public function sort(Array $sort)
+    {
+        $this->sorts = array_merge($this->sorts,$sort);
+        return $this;
+    }
+    
     /**
      * @return string
      */
