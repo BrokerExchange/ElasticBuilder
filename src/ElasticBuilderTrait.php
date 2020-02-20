@@ -48,6 +48,14 @@ trait ElasticBuilderTrait
     {
         return new Aggregation;
     }
+    
+    /**
+     * @return Sort
+     */
+    public function sort()
+    {
+        return new Sort;
+    }
 
     /**
      * @param int|float $negative_boost
