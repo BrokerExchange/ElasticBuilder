@@ -271,7 +271,7 @@ class Aggregation
                     'field' => $field,
                     'interval' => $interval,
                     'format' => $format,
-                    'time-zone' => $timezone,
+                    'time_zone' => $timezone,
                     'offset' => $offset
                 ])
             ]
