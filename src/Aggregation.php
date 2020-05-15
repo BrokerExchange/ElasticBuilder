@@ -271,7 +271,7 @@ class Aggregation
                     'field' => $field,
                     'interval' => $interval,
                     'format' => $format,
-                    'timezone' => $timezone,
+                    'time-zone' => $timezone,
                     'offset' => $offset
                 ])
             ]
@@ -429,6 +429,22 @@ class Aggregation
        return [
            $namespace => [
                'significant_terms' => [
+                   'field' => $field
+               ]
+           ]
+       ];
+   }
+   
+   /**
+     * @param $namespace
+     * @param $field
+     * @return array
+     */
+   public function significant_text($namespace,$field)
+   {
+       return [
+           $namespace => [
+               'significant_text' => [
                    'field' => $field
                ]
            ]
