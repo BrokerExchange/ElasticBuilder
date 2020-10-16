@@ -10,6 +10,8 @@
 
 namespace ElasticBuilder;
 
+use ElasticBuilder\AggregationCompositeValuesSource;
+
 /**
  * Class Aggregation
  * @package ElasticBuilder
@@ -451,5 +453,23 @@ class Aggregation
        ];
    }
 
+   /**
+     * @param string $namespace the aggregation's output namespace
+     * @param array $values_source the sources of the values
+     * @param int $size maximum number of composite buckets to be returned
+     * @return \array[][]
+     */
+   public function composite($namespace, $values_source, $size = 10){
+
+       return [
+           $namespace => [
+                'composite' => [
+                    'size' => $size,
+                    'sources' => $values_source
+                ]
+           ]
+       ];
+
+   }
 
 }
