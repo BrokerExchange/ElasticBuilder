@@ -459,13 +459,13 @@ class Aggregation
      * @param int $size maximum number of composite buckets to be returned
      * @return \array[][]
      */
-   public function composite($namespace, $valuesSource, $size = 10){
+   public function composite($namespace, $values_source, $size = 10){
 
        return [
            $namespace => [
                 'composite' => [
                     'size' => $size,
-                    'sources' => $valuesSource
+                    'sources' => $values_source
                 ]
            ]
        ];
