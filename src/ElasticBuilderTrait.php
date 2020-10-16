@@ -50,6 +50,14 @@ trait ElasticBuilderTrait
     }
     
     /**
+     * @return AggregationCompositeValuesSource
+     */
+    public function aggCVS()
+    {
+        return new AggregationCompositeValuesSource;
+    }
+    
+    /**
      * @return Sort
      */
     public function sort()
