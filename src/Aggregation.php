@@ -455,7 +455,7 @@ class Aggregation
 
    /**
      * @param string $namespace the aggregation's output namespace
-     * @param array $valuesSource the sources of the values
+     * @param array $values_source the sources of the values
      * @param int $size maximum number of composite buckets to be returned
      * @return \array[][]
      */
