@@ -250,6 +250,7 @@ class ElasticBuilder
                 'minimum_should_match' => $minimum,
                 'fuzziness' => $fuzziness,
                 'boost' => $boost,
+                'lenient' => true,
             ])
         ];
 
