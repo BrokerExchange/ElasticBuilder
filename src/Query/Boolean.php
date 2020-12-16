@@ -33,7 +33,17 @@ class Boolean extends Query
      */
     public function must($query)
     {
-        $this->query['bool']['must'][] = $query;
+        $this->query['bool']['must'] = array_merge_recursive(($this->query['bool']['must'] ?? []), $query);
+        return $this;
+    }
+
+    /**
+     * @param $query
+     * @return $this
+     */
+    public function must_not($query)
+    {
+        $this->query['bool']['must_not'] = array_merge_recursive(($this->query['bool']['must_not'] ?? []), $query);
         return $this;
     }
 
@@ -43,7 +53,7 @@ class Boolean extends Query
      */
     public function filter($filter)
     {
-        $this->query['bool']['filter'][] = $filter;
+        $this->query['bool']['filter'] = array_merge_recursive(($this->query['bool']['filter'] ?? []), $filter);
         return $this;
     }
 
@@ -53,7 +63,7 @@ class Boolean extends Query
      */
     public function should($query)
     {
-        $this->query['bool']['should'][] = $query;
+        $this->query['bool']['should'] = array_merge_recursive(($this->query['bool']['should'] ?? []), $query);
         return $this;
     }
 

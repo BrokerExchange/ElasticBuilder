@@ -14,6 +14,7 @@ use ElasticBuilder\Query\Boolean;
 use ElasticBuilder\Query\Boosting;
 use ElasticBuilder\Query\ConstantScore;
 use ElasticBuilder\Query\DisMax;
+use ElasticBuilder\Query\FunctionScore;
 
 /**
  * Class ElasticBuilderTrait
@@ -22,7 +23,7 @@ use ElasticBuilder\Query\DisMax;
 trait ElasticBuilderTrait
 {
     /**
-     * @param int $boost
+     * @param int|float $boost
      * @param int $minimum_should_match
      * @return Query\Boolean
      */
@@ -32,7 +33,7 @@ trait ElasticBuilderTrait
     }
 
     /**
-     * @param int $boost
+     * @param int|float $boost
      * @return DisMax
      */
     public function dis_max($boost=1)
@@ -47,9 +48,25 @@ trait ElasticBuilderTrait
     {
         return new Aggregation;
     }
+    
+    /**
+     * @return AggregationCompositeValuesSource
+     */
+    public function aggCVS()
+    {
+        return new AggregationCompositeValuesSource;
+    }
+    
+    /**
+     * @return Sort
+     */
+    public function sort()
+    {
+        return new Sort;
+    }
 
     /**
-     * @param int $negative_boost
+     * @param int|float $negative_boost
      * @return Boosting
      */
     public function boosting($negative_boost=1)
@@ -58,11 +75,23 @@ trait ElasticBuilderTrait
     }
 
     /**
-     * @param int $boost
+     * @param int|float $boost
      * @return ConstantScore
      */
     public function constant_score($boost=1)
     {
         return new ConstantScore($boost);
+    }
+    
+    /**
+     * @param int|float|null $boost
+     * @param int|float|null $max_boost
+     * @param string $boost_mode
+     * @param int|float|null $min_score
+     * @param string $score_mode
+     * @return FunctionScore
+     */
+    public function function_score($boost=null,$max_boost=null,$boost_mode='multiply',$min_score=null,$score_mode='multiply'){
+        return new FunctionScore($boost,$max_boost,$boost_mode,$min_score,$score_mode);
     }
 }

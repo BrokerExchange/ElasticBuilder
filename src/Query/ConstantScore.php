@@ -16,7 +16,7 @@ class ConstantScore extends Query
 {
     /**
      * ConstantScore constructor.
-     * @param int $boost
+     * @param int|float|null $boost
      */
     public function __construct($boost=1)
     {
@@ -29,7 +29,7 @@ class ConstantScore extends Query
      */
     public function filter($filter)
     {
-        $this->query['constant_score']['filter'][] = $filter;
+        $this->query['constant_score']['filter'] = array_merge_recursive(($this->query['constant_score']['filter'] ?? []), $filter);
         return $this;
     }
 }

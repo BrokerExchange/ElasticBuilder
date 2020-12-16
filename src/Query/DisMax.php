@@ -35,7 +35,7 @@ class DisMax extends Query
      */
     public function query($query)
     {
-        $this->query['dis_max']['queries'][] = $query;
+        $this->query['dis_max']['queries'] = array_merge_recursive(($this->query['dis_max']['queries'] ?? []), $query);
     }
 
     /**

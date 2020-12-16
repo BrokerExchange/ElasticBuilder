@@ -29,7 +29,7 @@ class Boosting
      */
     public function positive($query)
     {
-        $this->query['boosting']['positive'][] = $query;
+        $this->query['boosting']['positive'] = array_merge_recursive(($this->query['boosting']['positive'] ?? []), $query);
         return $this;
     }
 
@@ -39,7 +39,7 @@ class Boosting
      */
     public function negative($query)
     {
-        $this->query['boosting']['negative'][] = $query;
+        $this->query['boosting']['negative'] = array_merge_recursive(($this->query['boosting']['negative'] ?? []), $query);
         return $this;
     }
 }

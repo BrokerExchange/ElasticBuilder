@@ -15,6 +15,7 @@ use ElasticBuilder\Query\Boolean;
 use ElasticBuilder\Query\Boosting;
 use ElasticBuilder\Query\DisMax;
 use ElasticBuilder\Query\ConstantScore;
+use ElasticBuilder\Query\FunctionScore;
 
 use Elasticsearch\Client as Elastic;
 use Illuminate\Database\Eloquent\Collection;
@@ -83,7 +84,7 @@ class ElasticBuilder
     }
 
     /**
-     * @param int $boost
+     * @param int|float $boost
      * @param int $minimum_should_match
      * @return Query\Boolean
      */
@@ -93,7 +94,7 @@ class ElasticBuilder
     }
 
     /**
-     * @param int $boost
+     * @param int|float $boost
      * @return DisMax
      */
     public function dis_max($boost=1)
@@ -102,16 +103,28 @@ class ElasticBuilder
     }
 
     /**
-     * @param int $boost
+     * @param int|float $boost
      * @return ConstantScore
      */
     public function constant_score($boost=1)
     {
         return new ConstantScore($boost);
     }
+    
+    /**
+     * @param int|float|null $boost
+     * @param int|float|null $max_boost
+     * @param string $boost_mode
+     * @param int|float|null $min_score
+     * @param string $score_mode
+     * @return FunctionScore
+     */
+    public function function_score(){
+        return new FunctionScore($boost=null,$max_boost=null,$boost_mode='multiply',$min_score=null,$score_mode='multiply');
+    }
 
     /**
-     * @param int $negative_boost
+     * @param int|float $negative_boost
      * @return Boosting
      */
     public function boosting($negative_boost=1)
@@ -122,15 +135,29 @@ class ElasticBuilder
     /**
      * @param $field
      * @param $value
+     * @param int|float|null $boost
      * @return array
      */
-    public function term($field,$value)
+    public function term($field,$value,$boost=null)
     {
+        if(!is_null($boost))
+        {
+            return [
+                'term' => [
+                    $field => [
+                        'value' => $value,
+                        'boost' => $boost
+                    ]
+                ]
+            ];
+        }
+
         return [
             'term' => [
                 $field => $value
             ]
         ];
+        
     }
 
     /**
@@ -150,7 +177,7 @@ class ElasticBuilder
     /**
      * @param $field
      * @param array $ranges
-     * @param int $boost
+     * @param int|float|null $boost
      * @return array
      */
     public function range($field,$ranges=[],$boost=null)
@@ -173,7 +200,7 @@ class ElasticBuilder
      * @param $query
      * @param string $operator
      * @param int $minimum
-     * @param int $boost
+     * @param int|float|null $boost
      * @param string $analyzer
      * @param int $fuzziness
      * @return array
@@ -204,7 +231,7 @@ class ElasticBuilder
      * @param string $operator
      * @param string $type
      * @param int $minimum
-     * @param int $boost
+     * @param int|float|null $boost
      * @param string $analyzer
      * @param int $fuzziness
      * @return array
@@ -223,6 +250,7 @@ class ElasticBuilder
                 'minimum_should_match' => $minimum,
                 'fuzziness' => $fuzziness,
                 'boost' => $boost,
+                'lenient' => true,
             ])
         ];
 
@@ -232,7 +260,7 @@ class ElasticBuilder
     /**
      * @param $field
      * @param $query
-     * @param int $boost
+     * @param int|float|null $boost
      * @param string $analyzer
      * @param int $fuzziness
      * @return array
@@ -266,7 +294,7 @@ class ElasticBuilder
     /**
      * @param $field
      * @param $value
-     * @param int $boost
+     * @param int|float $boost
      * @param float $cuttoff
      * @param string $low_freq_operator
      * @param string $high_freq_operator
@@ -318,7 +346,7 @@ class ElasticBuilder
     /**
      * @param $field
      * @param $value
-     * @param int $boost
+     * @param int|float $boost
      * @return array
      */
     public function prefix($field,$value,$boost=1)
@@ -336,7 +364,7 @@ class ElasticBuilder
     /**
      * @param $field
      * @param $value
-     * @param int $boost
+     * @param int|float $boost
      * @param string $fuzziness
      * @param int $prefix_length
      * @param int $max_exp
@@ -450,21 +478,6 @@ class ElasticBuilder
         return $query;
     }
 
-
-
-    /**
-     * @param array $functions
-     * @return array
-     */
-    public function function_score($functions=[])
-    {
-        return [
-            'function_score' => [
-                'functions' => $functions
-            ]
-        ];
-    }
-
     /**
      * @param $field
      * @param $origin
@@ -510,6 +523,99 @@ class ElasticBuilder
                 ]
             ]
         ];
+    }
+    
+    /**
+     * @param string $field the name of the property-field with the location data
+     * @param string $distance the length and units used to create the radius
+     * @param array|string $origin the location data of the point of origin where the radius begins (center)
+     * @param string $distance_type what method is used to determine distance between points (ex: arc, plane)
+     * @param string $origin_format how to build the field data in the request (ex: array,geohash,properties,string)
+     * @param string $name optional name used to identify the query
+     * @param string $validation_method determine how points are considered valid (ex: COERCE,IGNORE_MALFORMED,STRICT)
+     * @return array
+     */
+    public function geo_distance($field,$distance,$origin,$distance_type='arc',$origin_format='array',$name='',$validation_method='STRICT'){
+
+        switch(strtolower($origin_format)){
+
+            case 'properties': {
+                $origin_formatted =[
+                    'lat' => $origin['lat'],
+                    'lon' => $origin['lon']
+                ];
+                break;
+            }
+            case 'geohash':
+                //note: for geohash -- origin string must be passed as "geohash"
+
+                //no break
+            case 'string': {
+                //note: for string -- origin string must be passed as "lat,lon"
+
+                $origin_formatted = $origin;
+
+                break;
+            }
+            case 'array':
+                //no break
+            default: {
+                $origin_formatted = [
+                    (double) $origin['lon'],
+                    (double) $origin['lat']
+                ];
+                break;
+            }
+        }
+
+        $distance_type = strtolower($distance_type);
+
+        switch($distance_type){
+            case 'arc':
+                //no break
+            case 'plane': {
+                //do nothing
+                break;
+            }
+            default: {
+                //reset to 'arc' if unnavailable option is sent
+                $distance_type = 'arc';
+                break;
+            }
+        }
+
+        $validation_method = strtoupper($validation_method);
+
+        switch($validation_method){
+            case 'COERCE':
+                //no break
+            case 'IGNORE_MALFORMED':
+                //no break
+            case 'STRICT': {
+                //do nothing
+                break;
+            }
+            default: {
+                //reset to 'arc' if unnavailable option is sent
+                $validation_method = 'STRICT';
+                break;
+            }
+        }
+
+        $geo_distance = [
+            'geo_distance'=> [
+                'distance' => $distance,
+                'distance_type' => $distance_type,
+                "{$field}" => $origin_formatted,
+                'validation_method' => $validation_method
+            ]
+        ];
+
+        if(!empty($name)){
+            $geo_distance['geo_distance']['_name'] = $name;
+        }
+
+        return $geo_distance;
     }
 
     /**

@@ -10,6 +10,8 @@
 
 namespace ElasticBuilder;
 
+use ElasticBuilder\AggregationCompositeValuesSource;
+
 /**
  * Class Aggregation
  * @package ElasticBuilder
@@ -207,17 +209,15 @@ class Aggregation
     /**
      * @param $namespace
      * @param $filters
-     * @param $aggs
      * @return array
      */
-    public function filters($namespace,$filters,$aggs)
+    public function filters($namespace,$filters)
     {
         return [
             $namespace => [
                 'filters' => [
                     'filters' => $filters
-                ],
-                'aggs' => $aggs
+                ]
             ]
         ];
     }
@@ -273,7 +273,7 @@ class Aggregation
                     'field' => $field,
                     'interval' => $interval,
                     'format' => $format,
-                    'timezone' => $timezone,
+                    'time_zone' => $timezone,
                     'offset' => $offset
                 ])
             ]
@@ -414,9 +414,9 @@ class Aggregation
         return [
             $namespace => [
                 'nested' => [
-                    'path' => $path,
-                    'aggs' => $aggs
-                ]
+                    'path' => $path
+                ],
+                'aggs' => $aggs
             ]
         ];
     }
@@ -436,6 +436,40 @@ class Aggregation
            ]
        ];
    }
+   
+   /**
+     * @param $namespace
+     * @param $field
+     * @return array
+     */
+   public function significant_text($namespace,$field)
+   {
+       return [
+           $namespace => [
+               'significant_text' => [
+                   'field' => $field
+               ]
+           ]
+       ];
+   }
 
+   /**
+     * @param string $namespace the aggregation's output namespace
+     * @param array $values_source the sources of the values
+     * @param int $size maximum number of composite buckets to be returned
+     * @return \array[][]
+     */
+   public function composite($namespace, $values_source, $size = 10){
+
+       return [
+           $namespace => [
+                'composite' => [
+                    'size' => $size,
+                    'sources' => $values_source
+                ]
+           ]
+       ];
+
+   }
 
 }
