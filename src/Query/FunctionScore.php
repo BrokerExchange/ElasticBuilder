@@ -94,28 +94,35 @@ class FunctionScore extends Query
      * @param string $decay how documents are scored at the distance provided via scale
      * @param int|float|null $weight the score applied to this function
      * @param string $multiValueMode if more than one origin is given, this value is used to determine the distance ('min'|'max'|'avg'|'sum')
+     * @param array $filters additional criteria to filter the decay function by
      * @return FunctionScore
      */
-    private function functions_decay($decayFunction, $field, $scale, $origin = '', $offset = '', $decay = '', $weight = null, $multiValueMode = 'min')
+    private function functions_decay($decayFunction, $field, $scale, $origin = '', $offset = '', $decay = '', $weight = null, $multiValueMode = 'min', $filters = [])
     {
-
         $new_decay = [
             $decayFunction => [
                 $field => [
                     'decay' => $decay,
-                    'multi_value_mode' => $multiValueMode,
-                    'offset' => $offset,
                     'scale' => $scale,
-                ]
+                ],
+                'multi_value_mode' => $multiValueMode,
             ]
         ];
 
+        if (!empty($offset)) {
+            $new_decay[$decayFunction][$field]['offset'] = $offset;
+        }
+
         if (!empty($origin)) {
-            $new_decay[$decay][$field]['origin'] = $origin;
+            $new_decay[$decayFunction][$field]['origin'] = $origin;
         }
 
         if(!is_null($weight)){
             $new_decay['weight'] = $weight;
+        }
+
+        if (!empty($filters)) {
+            $new_decay = array_merge($new_decay, $filters);
         }
 
         $this->query['function_score']['functions'][] = $new_decay;
@@ -133,12 +140,13 @@ class FunctionScore extends Query
      * @param string $decay how documents are scored at the distance provided via scale
      * @param int|float|null $weight the score applied to this function
      * @param string $multiValueMode if more than one origin is given, this value is used to determine the distance ('min'|'max'|'avg'|'sum')
+     * @param array $filters additional criteria to filter the gaussian decay function by
      * @return FunctionScore
      */
-    public function gauss($field,$scale,$origin = '',$offset = '0',$decay = '0.5', $weight = null, $multiValueMode = 'min')
+    public function gauss($field,$scale,$origin = '',$offset = '0',$decay = '0.5', $weight = null, $multiValueMode = 'min', $filters = [])
     {
 
-        return $this->functions_decay('gauss', $field, $scale, $origin, $offset, $decay, $weight, $multiValueMode);
+        return $this->functions_decay('gauss', $field, $scale, $origin, $offset, $decay, $weight, $multiValueMode, $filters);
 
     }
 
@@ -152,17 +160,18 @@ class FunctionScore extends Query
      * @param string $decay how documents are scored at the distance provided via scale
      * @param int|float|null $weight the score applied to this function
      * @param string $multiValueMode if more than one origin is given, this value is used to determine the distance ('min'|'max'|'avg'|'sum')
+     * @param array $filters additional criteria to filter the exponential decay function by
      * @return FunctionScore
      */
-    public function exp($field,$scale,$origin = '',$offset = '0',$decay = '0.5', $weight = null, $multiValueMode = 'min')
+    public function exp($field,$scale,$origin = '',$offset = '0',$decay = '0.5', $weight = null, $multiValueMode = 'min', $filters = [])
     {
 
-        return $this->functions_decay('exp', $field, $scale, $origin, $offset, $decay, $weight, $multiValueMode);
+        return $this->functions_decay('exp', $field, $scale, $origin, $offset, $decay, $weight, $multiValueMode, $filters);
 
     }
 
     /**
-     * a decay function based (a.k.a. exponential decay)
+     * a decay function based (a.k.a. linear decay)
      *
      * @param string $field the field used for calculation, the type of this field determines whether origin is required or not by Elasticsearch
      * @param string $scale defines the distance from origin plus the offset at which computed score equals the decay
@@ -171,12 +180,13 @@ class FunctionScore extends Query
      * @param string $decay how documents are scored at the distance provided via scale
      * @param int|float|null $weight the score applied to this function
      * @param string $multiValueMode if more than one origin is given, this value is used to determine the distance ('min'|'max'|'avg'|'sum')
+     * @param array $filters additional criteria to filter the linear decay function by
      * @return FunctionScore
      */
-    public function linear($field,$scale,$origin = '',$offset = '0',$decay = '0.5', $weight = null, $multiValueMode = 'min')
+    public function linear($field,$scale,$origin = '',$offset = '0',$decay = '0.5', $weight = null, $multiValueMode = 'min', $filters = [])
     {
 
-        return $this->functions_decay('linear', $field, $scale, $origin, $offset, $decay, $weight, $multiValueMode);
+        return $this->functions_decay('linear', $field, $scale, $origin, $offset, $decay, $weight, $multiValueMode, $filters);
 
     }
 }
