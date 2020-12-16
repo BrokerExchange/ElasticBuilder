@@ -82,4 +82,101 @@ class FunctionScore extends Query
 
         return $this;
     }
+
+    /**
+     * score via functions which are determined against a distance value
+     *
+     * @param string $decayFunction the type of decay function to be used for calculation ('gauss'|'exp'|'linear')
+     * @param string $field the field used for calculation, the type of this field determines whether origin is required or not by Elasticsearch
+     * @param string $scale defines the distance from origin plus the offset at which computed score equals the decay
+     * @param mixed $origin note: Required (by Elasticsearch) for Geo and Numeric Field Types
+     * @param string $offset if set, the decay function will only begin computing decay functions with distances greater than the offset
+     * @param string $decay how documents are scored at the distance provided via scale
+     * @param int|float|null $weight the score applied to this function
+     * @param string $multiValueMode if more than one origin is given, this value is used to determine the distance ('min'|'max'|'avg'|'sum')
+     * @return FunctionScore
+     */
+    private function functions_decay($decayFunction, $field, $scale, $origin = '', $offset = '', $decay = '', $weight = null, $multiValueMode = 'min')
+    {
+
+        $new_decay = [
+            $decayFunction => [
+                $field => [
+                    'decay' => $decay,
+                    'multi_value_mode' => $multiValueMode,
+                    'offset' => $offset,
+                    'scale' => $scale,
+                ]
+            ]
+        ];
+
+        if (!empty($origin)) {
+            $new_decay[$decay][$field]['origin'] = $origin;
+        }
+
+        if(!is_null($weight)){
+            $new_decay['weight'] = $weight;
+        }
+
+        $this->query['function_score']['functions'][] = $new_decay;
+
+        return $this;
+    }
+
+    /**
+     * a decay function based (a.k.a. normal decay)
+     *
+     * @param string $field the field used for calculation, the type of this field determines whether origin is required or not by Elasticsearch
+     * @param string $scale defines the distance from origin plus the offset at which computed score equals the decay
+     * @param mixed $origin note: Required (by Elasticsearch) for Geo and Numeric Field Types
+     * @param string $offset if set, the decay function will only begin computing decay functions with distances greater than the offset
+     * @param string $decay how documents are scored at the distance provided via scale
+     * @param int|float|null $weight the score applied to this function
+     * @param string $multiValueMode if more than one origin is given, this value is used to determine the distance ('min'|'max'|'avg'|'sum')
+     * @return FunctionScore
+     */
+    public function gauss($field,$scale,$origin = '',$offset = '0',$decay = '0.5', $weight = null, $multiValueMode = 'min')
+    {
+
+        return $this->functions_decay('gauss', $field, $scale, $origin, $offset, $decay, $weight, $multiValueMode);
+
+    }
+
+    /**
+     * a decay function based (a.k.a. exponential decay)
+     *
+     * @param string $field the field used for calculation, the type of this field determines whether origin is required or not by Elasticsearch
+     * @param string $scale defines the distance from origin plus the offset at which computed score equals the decay
+     * @param mixed $origin note: Required (by Elasticsearch) for Geo and Numeric Field Types
+     * @param string $offset if set, the decay function will only begin computing decay functions with distances greater than the offset
+     * @param string $decay how documents are scored at the distance provided via scale
+     * @param int|float|null $weight the score applied to this function
+     * @param string $multiValueMode if more than one origin is given, this value is used to determine the distance ('min'|'max'|'avg'|'sum')
+     * @return FunctionScore
+     */
+    public function exp($field,$scale,$origin = '',$offset = '0',$decay = '0.5', $weight = null, $multiValueMode = 'min')
+    {
+
+        return $this->functions_decay('exp', $field, $scale, $origin, $offset, $decay, $weight, $multiValueMode);
+
+    }
+
+    /**
+     * a decay function based (a.k.a. exponential decay)
+     *
+     * @param string $field the field used for calculation, the type of this field determines whether origin is required or not by Elasticsearch
+     * @param string $scale defines the distance from origin plus the offset at which computed score equals the decay
+     * @param mixed $origin note: Required (by Elasticsearch) for Geo and Numeric Field Types
+     * @param string $offset if set, the decay function will only begin computing decay functions with distances greater than the offset
+     * @param string $decay how documents are scored at the distance provided via scale
+     * @param int|float|null $weight the score applied to this function
+     * @param string $multiValueMode if more than one origin is given, this value is used to determine the distance ('min'|'max'|'avg'|'sum')
+     * @return FunctionScore
+     */
+    public function linear($field,$scale,$origin = '',$offset = '0',$decay = '0.5', $weight = null, $multiValueMode = 'min')
+    {
+
+        return $this->functions_decay('linear', $field, $scale, $origin, $offset, $decay, $weight, $multiValueMode);
+
+    }
 }
