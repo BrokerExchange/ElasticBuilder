@@ -11,16 +11,16 @@
 
 namespace ElasticBuilder;
 
-use ElasticBuilder\Query\Boolean;
+use ElasticBuilder\Query\Boolean as QueryBoolean;
 use ElasticBuilder\Query\Boosting;
 use ElasticBuilder\Query\DisMax;
 use ElasticBuilder\Query\ConstantScore;
 use ElasticBuilder\Query\FunctionScore;
 
+use ElasticBuilder\Query\Query;
 use Elasticsearch\Client as Elastic;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as BaseCollection;
-
 
 
 /**
@@ -32,42 +32,42 @@ class ElasticBuilder
     /**
      * @var Elastic
      */
-    public $elastic;
+    public Elastic $elastic;
 
     /**
      * @var
      */
-    public $index;
+    public string $index;
 
     /**
      * @var string specify the handler used by \Elastic\Client
      */
-    protected $handler;
+    protected string $handler;
 
     /**
      * @var array the client parameters to be used by the client handler
      */
-    private $client = [];
+    private array $client = [];
 
     /**
      * @var int the offset of the results window
      */
-    private $from = 0;
+    private int $from = 0;
 
     /**
      * @var int the size of the results window
      */
-    private $size = 10;
+    private int $size = 10;
 
     /**
      * Create a new engine instance.
      *
-     * @param \Elasticsearch\Client $elastic
+     * @param Elastic $elastic
      * @param string $index
      * @param string $handler the handler
      * @return void
      */
-    public function __construct(Elastic $elastic, $index, $handler = 'curl')
+    public function __construct(Elastic $elastic, string $index, string $handler = 'curl')
     {
         $this->elastic = $elastic;
         $this->handler = $handler;
@@ -78,67 +78,70 @@ class ElasticBuilder
     /**
      * @return Aggregation
      */
-    public function agg()
+    public function agg(): Aggregation
     {
         return new Aggregation;
     }
 
     /**
-     * @param int|float $boost
+     * note: QueryBoolean is used here because "Boolean" is a reserved word in PHP, the interpreter was "having a fit"
+     *
+     * @param float|int $boost
      * @param int $minimum_should_match
-     * @return Query\Boolean
+     * @return QueryBoolean
      */
-    public function boolean($boost=1,$minimum_should_match=1)
+    public function boolean(float|int $boost = 1, int $minimum_should_match = 1): QueryBoolean
     {
-        return new Boolean($boost,$minimum_should_match);
+        return new QueryBoolean($boost,$minimum_should_match);
     }
 
     /**
-     * @param int|float $boost
+     * @param float|int $boost
      * @return DisMax
      */
-    public function dis_max($boost=1)
+    public function dis_max(float|int $boost = 1): DisMax
     {
         return new DisMax($boost);
     }
 
     /**
-     * @param int|float $boost
+     * @param float|int $boost
      * @return ConstantScore
      */
-    public function constant_score($boost=1)
+    public function constant_score(float|int $boost = 1): ConstantScore
     {
         return new ConstantScore($boost);
     }
     
     /**
-     * @param int|float|null $boost
-     * @param int|float|null $max_boost
+     * @param float|int|null $boost
+     * @param float|int|null $max_boost
      * @param string $boost_mode
-     * @param int|float|null $min_score
+     * @param float|int|null $min_score
      * @param string $score_mode
      * @return FunctionScore
      */
-    public function function_score(){
-        return new FunctionScore($boost=null,$max_boost=null,$boost_mode='multiply',$min_score=null,$score_mode='multiply');
+    public function function_score(float|int|null $boost = null, float|int|null $max_boost = null, string $boost_mode='multiply', float|int|null $min_score = null, string $score_mode = 'multiply'): FunctionScore
+    {
+        return new FunctionScore($boost, $max_boost, $boost_mode, $min_score, $score_mode);
     }
 
     /**
-     * @param int|float $negative_boost
+     * @param float|int $negative_boost
      * @return Boosting
      */
-    public function boosting($negative_boost=1)
+    public function boosting(float|int $negative_boost = 1): Boosting
     {
         return new Boosting($negative_boost);
     }
 
     /**
-     * @param $field
-     * @param $value
-     * @param int|float|null $boost
+     * @param string $field
+     * @param string $value
+     * @param float|int|null $boost
      * @return array
      */
-    public function term($field,$value,$boost=null)
+    public function term(string $field, string $value, float|int|null $boost = null): array
     {
         if(!is_null($boost))
         {
@@ -161,11 +164,11 @@ class ElasticBuilder
     }
 
     /**
-     * @param $field
+     * @param string $field
      * @param array $values
      * @return array
      */
-    public function terms($field,$values=[])
+    public function terms(string $field, array $values = []): array
     {
         return [
             'terms' => [
@@ -175,12 +178,12 @@ class ElasticBuilder
     }
 
     /**
-     * @param $field
+     * @param string $field
      * @param array $ranges
-     * @param int|float|null $boost
+     * @param float|int|null $boost
      * @return array
      */
-    public function range($field,$ranges=[],$boost=null)
+    public function range(string $field, array $ranges = [], float|int|null $boost = null): array
     {
 
         if(!is_null($boost))
@@ -196,16 +199,16 @@ class ElasticBuilder
     }
 
     /**
-     * @param $field
-     * @param $query
+     * @param string $field
+     * @param string $query
      * @param string $operator
-     * @param int $minimum
-     * @param int|float|null $boost
+     * @param int|null $minimum
+     * @param float|int|null $boost
      * @param string $analyzer
-     * @param int $fuzziness
+     * @param int|null $fuzziness
      * @return array
      */
-    public function match($field,$query,$operator='or',$minimum=null,$boost=null,$analyzer='',$fuzziness=null)
+    public function match(string $field,string $query,$operator='or', int|null $minimum=null, float|int|null $boost=null, string $analyzer='', int|null $fuzziness=null): array
     {
 
         $params = [
@@ -227,16 +230,25 @@ class ElasticBuilder
 
     /**
      * @param array $fields
-     * @param $query
+     * @param string $query
      * @param string $operator
-     * @param string $type
-     * @param int $minimum
-     * @param int|float|null $boost
+     * @param string|null $type
+     * @param int|null $minimum
+     * @param float|int|null $boost
      * @param string $analyzer
-     * @param int $fuzziness
+     * @param int|null $fuzziness
      * @return array
      */
-    public function multi_match($fields=[],$query,$operator='or',$type=null,$minimum=null,$boost=null,$analyzer='',$fuzziness=null)
+    public function multi_match(
+        array $fields = [],
+        string $query = '',
+        string $operator = 'or',
+        string $type = null,
+        int|null $minimum = null,
+        float|int|null $boost = null,
+        string $analyzer = '',
+        int $fuzziness = null
+    ): array
     {
 
         $params = [
@@ -258,14 +270,14 @@ class ElasticBuilder
     }
 
     /**
-     * @param $field
-     * @param $query
-     * @param int|float|null $boost
+     * @param string $field
+     * @param string $query
+     * @param float|int|null $boost
      * @param string $analyzer
-     * @param int $fuzziness
+     * @param int|null $fuzziness
      * @return array
      */
-    public function match_phrase_prefix($field, $query, $boost = null, $analyzer = '', $fuzziness = null)
+    public function match_phrase_prefix(string $field, string $query, float|int|null $boost = null, string $analyzer = '', int $fuzziness = null): array
     {
         $params = [
             'match_phrase_prefix' => [
@@ -284,7 +296,7 @@ class ElasticBuilder
     /**
      * @return array
      */
-    public function match_all()
+    public function match_all(): array
     {
         return [
             'match_all' => []
@@ -292,16 +304,16 @@ class ElasticBuilder
     }
 
     /**
-     * @param $field
-     * @param $value
-     * @param int|float $boost
+     * @param string $field
+     * @param string $value
+     * @param float|int $boost
      * @param float $cuttoff
      * @param string $low_freq_operator
      * @param string $high_freq_operator
      * @param string $analyzer
      * @return array
      */
-    public function common($field,$value,$boost=1,$cuttoff=.1,$low_freq_operator='or',$high_freq_operator='or',$analyzer='standard')
+    public function common(string $field, string $value, float|int $boost = 1, float $cuttoff = .1, string $low_freq_operator='or', string $high_freq_operator='or', string $analyzer='standard'): array
     {
         return [
             'common' => [
@@ -318,10 +330,10 @@ class ElasticBuilder
     }
 
     /**
-     * @param $field
+     * @param string $field
      * @return array
      */
-    public function exists($field)
+    public function exists(string $field): array
     {
         return [
             'exits' => [
@@ -331,10 +343,10 @@ class ElasticBuilder
     }
 
     /**
-     * @param $field
+     * @param string $field
      * @return array
      */
-    public function missing($field)
+    public function missing(string $field): array
     {
         return [
             'missing' => [
@@ -344,12 +356,12 @@ class ElasticBuilder
     }
 
     /**
-     * @param $field
-     * @param $value
-     * @param int|float $boost
+     * @param string $field
+     * @param string $value
+     * @param float|int $boost
      * @return array
      */
-    public function prefix($field,$value,$boost=1)
+    public function prefix(string $field, string $value, float|int $boost = 1)
     {
         return [
             'prefix' => [
@@ -362,15 +374,15 @@ class ElasticBuilder
     }
 
     /**
-     * @param $field
-     * @param $value
-     * @param int|float $boost
+     * @param string $field
+     * @param string $value
+     * @param float|int $boost
      * @param string $fuzziness
      * @param int $prefix_length
      * @param int $max_exp
      * @return array
      */
-    public function fuzzy($field,$value,$boost=1,$fuzziness='AUTO',$prefix_length=0,$max_exp=50)
+    public function fuzzy(string $field, string $value, float|int $boost = 1, string $fuzziness='AUTO', int $prefix_length=0, int $max_exp=50): array
     {
         return [
             'fuzzy' => [
@@ -386,11 +398,11 @@ class ElasticBuilder
     }
 
     /**
-     * @param $type
+     * @param string $type
      * @param array $values
      * @return array
      */
-    public function ids($type,$values=[])
+    public function ids(string $type, array $values = []): array
     {
         return [
             'ids' => [
@@ -401,10 +413,10 @@ class ElasticBuilder
     }
 
     /**
-     * @param $value
+     * @param string $value
      * @return array
      */
-    public function limit($value)
+    public function limit(string $value): array
     {
         return [
             'limit' => [
@@ -414,12 +426,12 @@ class ElasticBuilder
     }
 
     /**
-     * @param $path
-     * @param $query
+     * @param string $path
+     * @param array $query
      * @param string $score_mode
      * @return array
      */
-    public function nested($path,$query,$score_mode='avg')
+    public function nested(string $path, array $query, string $score_mode = 'avg'): array
     {
         return [
             'nested' => [
@@ -431,14 +443,14 @@ class ElasticBuilder
     }
 
     /**
-     * @param $type
-     * @param $query
+     * @param string $type
+     * @param array $query
      * @param string $score_mode
-     * @param $min_children
-     * @param $max_children
+     * @param int $min_children
+     * @param int $max_children
      * @return array
      */
-    public function has_child($type,$query,$score_mode='none',$min_children,$max_children)
+    public function has_child(string $type, array $query, string $score_mode='none', int $min_children = 0, int $max_children = 0): array
     {
         $query = [
             'has_child' => [
@@ -460,12 +472,12 @@ class ElasticBuilder
     }
 
     /**
-     * @param $type
-     * @param $query
+     * @param string $type
+     * @param array $query
      * @param string $score_mode
      * @return array
      */
-    public function has_parent($type,$query,$score_mode='none')
+    public function has_parent(string $type, array $query, string $score_mode='none'): array
     {
         $query = [
             'has_child' => [
@@ -479,12 +491,12 @@ class ElasticBuilder
     }
 
     /**
-     * @param $field
-     * @param $top_left
-     * @param $bottom_right
+     * @param string $field
+     * @param array|float|string $top_left
+     * @param array|float|string $bottom_right
      * @return array
      */
-    public function geo_bounding_box($field,$top_left,$bottom_right)
+    public function geo_bounding_box(string $field, array|float|string $top_left, array|float|string $bottom_right): array
     {
         return [
             'geo_bounding_box' => [
@@ -499,14 +511,15 @@ class ElasticBuilder
     /**
      * @param string $field the name of the property-field with the location data
      * @param string $distance the length and units used to create the radius
-     * @param array|string $origin the location data of the point of origin where the radius begins (center)
+     * @param array $origin the location data of the point of origin where the radius begins (center)
      * @param string $distance_type what method is used to determine distance between points (ex: arc, plane)
      * @param string $origin_format how to build the field data in the request (ex: array,geohash,properties,string)
      * @param string $name optional name used to identify the query
      * @param string $validation_method determine how points are considered valid (ex: COERCE,IGNORE_MALFORMED,STRICT)
      * @return array
      */
-    public function geo_distance($field,$distance,$origin,$distance_type='arc',$origin_format='array',$name='',$validation_method='STRICT'){
+    public function geo_distance(string $field, string $distance, array $origin, string $distance_type='arc', string $origin_format='array', string $name='', string $validation_method='STRICT'): array
+    {
 
         switch(strtolower($origin_format)){
 
@@ -549,7 +562,7 @@ class ElasticBuilder
                 break;
             }
             default: {
-                //reset to 'arc' if unnavailable option is sent
+                //reset to 'arc' if unavailable option is sent
                 $distance_type = 'arc';
                 break;
             }
@@ -567,7 +580,7 @@ class ElasticBuilder
                 break;
             }
             default: {
-                //reset to 'arc' if unnavailable option is sent
+                //reset to 'arc' if unavailable option is sent
                 $validation_method = 'STRICT';
                 break;
             }
@@ -593,8 +606,9 @@ class ElasticBuilder
      * Set the offset of the results window
      *
      * @param int $offset the offset of the results window
+     * @return void
      */
-    public function from($offset = 0)
+    public function from(int $offset = 0): void
     {
 
         if (is_integer($offset)) {
@@ -609,8 +623,9 @@ class ElasticBuilder
      * Set the result window size
      *
      * @param int $hits the number of hits in the results window
+     * @return void
      */
-    public function size($hits = 10)
+    public function size(int $hits = 10): void
     {
 
         if (is_integer($hits)) {
@@ -625,8 +640,9 @@ class ElasticBuilder
      * Set the client parameters
      *
      * @param array $client
+     * @return void
      */
-    public function client_parameters($client = [])
+    public function client_parameters(array $client = []): void
     {
 
         if ($this->handler == 'curl') {
@@ -678,11 +694,11 @@ class ElasticBuilder
     }
 
     /**
-     * @param $params
-     * @param $type
+     * @param array $params
+     * @param string $type
      * @return array
      */
-    public function search($params, $type)
+    public function search(array $params, string $type): array
     {
 
         $query = [
@@ -700,7 +716,7 @@ class ElasticBuilder
             $search = $this->elastic->search($query);
             return $search;
 
-        }catch(Exception $e)
+        }catch(\Exception $e)
         {
             \Log::info($e);
         }

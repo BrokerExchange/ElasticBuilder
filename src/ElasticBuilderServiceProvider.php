@@ -14,7 +14,6 @@ namespace ElasticBuilder;
 use Illuminate\Support\ServiceProvider;
 use Elasticsearch\ClientBuilder as Builder;
 
-
 class ElasticBuilderServiceProvider extends ServiceProvider
 {
     /**
@@ -22,7 +21,7 @@ class ElasticBuilderServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         //
     }
@@ -32,7 +31,7 @@ class ElasticBuilderServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->bind('elasticbuilder', function() {
             return new ElasticBuilder(Builder::create()

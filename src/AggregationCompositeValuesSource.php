@@ -28,9 +28,9 @@ class AggregationCompositeValuesSource
      *  https://www.elastic.co/guide/en/elasticsearch/reference/6.8/search-aggregations-bucket-daterange-aggregation.html#date-format-pattern
      * @param string $time_zone the time zone with which to adjust results
      * @param string $order the sort order of the source values
-     * @param bool $missing_bucket whether or not to include documents which are missing the resecptive source value
+     * @param bool $missing_bucket determines inclusion of documents which are missing the respective source value
      */
-    public function date_histogram($namespace, $field, $interval, $format = '', $time_zone = '', $order = 'asc', $missing_bucket = false)
+    public function date_histogram(string $namespace, string $field, string $interval, string $format = '', string $time_zone = '', string $order = 'asc', bool $missing_bucket = false)
     {
         $date_histogram = [
             $namespace => [
@@ -67,9 +67,10 @@ class AggregationCompositeValuesSource
      * @param string $field the field to be used for the values
      * @param string $interval the interval to be used to define the values
      * @param string $order the sort order of the source values
-     * @param bool $missing_bucket whether or not to include documents which are missing the resecptive source value
+     * @param bool $missing_bucket determines inclusion of documents which are missing the respective source value
+     * @return array
      */
-    public function histogram($namespace, $field, $interval, $order = 'asc', $missing_bucket = false)
+    public function histogram(string $namespace, string $field, string $interval, string $order = 'asc', bool $missing_bucket = false): array
     {
 
         $histogram = [
@@ -98,10 +99,10 @@ class AggregationCompositeValuesSource
      * @param string $namespace the namespace of the value source
      * @param string $field the field to be used for the values
      * @param string $order the sort order of the source values
-     * @param bool $missing_bucket whether or not to include documents which are missing the resecptive source value
+     * @param bool $missing_bucket determines inclusion of documents which are missing the respective source value
      * @return array
      */
-    public function terms($namespace, $field, $order = 'asc', $missing_bucket = false)
+    public function terms(string $namespace, string $field, string $order = 'asc', bool $missing_bucket = false): array
     {
         $terms = [
             $namespace => [

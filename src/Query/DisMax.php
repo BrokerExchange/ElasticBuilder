@@ -19,29 +19,35 @@ class DisMax extends Query
     /**
      * @var
      */
-    protected $queries; //the queries portion of the dis_max query
+    protected array $queries; //the queries portion of the dis_max query
 
     /**
      * DisMax constructor.
      * @param int $boost
      */
-    public function __construct($boost=1)
+    public function __construct(int $boost = 1)
     {
-        $this->query = ['dis_max'=>['boost'=>$boost]];
+        $this->query = [
+            'dis_max' => [
+                'boost' => $boost
+            ]
+        ];
     }
 
     /**
-     * @param $query
+     * @param array $query
+     * @return void
      */
-    public function query($query)
+    public function query(array $query): void
     {
         $this->query['dis_max']['queries'] = array_merge_recursive(($this->query['dis_max']['queries'] ?? []), $query);
     }
 
     /**
      * @param array $queries
+     * @return void
      */
-    public function queries($queries=[])
+    public function queries(array $queries=[]): void
     {
         $this->query['dis_max']['queries'] = $queries;
     }

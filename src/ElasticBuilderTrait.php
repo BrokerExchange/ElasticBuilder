@@ -10,11 +10,12 @@
 
 namespace ElasticBuilder;
 
-use ElasticBuilder\Query\Boolean;
+use ElasticBuilder\Query\Boolean as QueryBoolean;
 use ElasticBuilder\Query\Boosting;
 use ElasticBuilder\Query\ConstantScore;
 use ElasticBuilder\Query\DisMax;
 use ElasticBuilder\Query\FunctionScore;
+use ElasticBuilder\Query\Query;
 
 /**
  * Class ElasticBuilderTrait
@@ -23,20 +24,22 @@ use ElasticBuilder\Query\FunctionScore;
 trait ElasticBuilderTrait
 {
     /**
-     * @param int|float $boost
+     * note: QueryBoolean is used here because "Boolean" is a reserved word in PHP, the interpreter was "having a fit"
+     *
+     * @param float|int $boost
      * @param int $minimum_should_match
-     * @return Query\Boolean
+     * @return QueryBoolean
      */
-    public function boolean($boost=1,$minimum_should_match=1)
+    public function boolean(float|int $boost=1, int $minimum_should_match = 1): QueryBoolean
     {
-        return new Boolean($boost,$minimum_should_match);
+        return new QueryBoolean($boost,$minimum_should_match);
     }
 
     /**
-     * @param int|float $boost
+     * @param float|int $boost
      * @return DisMax
      */
-    public function dis_max($boost=1)
+    public function dis_max(float|int $boost = 1): Dismax
     {
         return new DisMax($boost);
     }
@@ -44,7 +47,7 @@ trait ElasticBuilderTrait
     /**
      * @return Aggregation
      */
-    public function agg()
+    public function agg(): Aggregation
     {
         return new Aggregation;
     }
@@ -52,7 +55,7 @@ trait ElasticBuilderTrait
     /**
      * @return AggregationCompositeValuesSource
      */
-    public function aggCVS()
+    public function aggCVS(): AggregationCompositeValuesSource
     {
         return new AggregationCompositeValuesSource;
     }
@@ -60,38 +63,39 @@ trait ElasticBuilderTrait
     /**
      * @return Sort
      */
-    public function sort()
+    public function sort(): Sort
     {
         return new Sort;
     }
 
     /**
-     * @param int|float $negative_boost
+     * @param float|int $negative_boost
      * @return Boosting
      */
-    public function boosting($negative_boost=1)
+    public function boosting(float|int $negative_boost = 1): Boosting
     {
         return new Boosting($negative_boost);
     }
 
     /**
-     * @param int|float $boost
+     * @param float|int $boost
      * @return ConstantScore
      */
-    public function constant_score($boost=1)
+    public function constant_score(float|int $boost = 1)
     {
         return new ConstantScore($boost);
     }
     
     /**
-     * @param int|float|null $boost
-     * @param int|float|null $max_boost
+     * @param float|int|null $boost
+     * @param float|int|null $max_boost
      * @param string $boost_mode
-     * @param int|float|null $min_score
+     * @param float|int|null $min_score
      * @param string $score_mode
      * @return FunctionScore
      */
-    public function function_score($boost=null,$max_boost=null,$boost_mode='multiply',$min_score=null,$score_mode='multiply'){
+    public function function_score(float|int|null $boost=null, float|int|null $max_boost = null, string $boost_mode = 'multiply', float|int|null $min_score=null, string $score_mode = 'multiply'): FunctionScore
+    {
         return new FunctionScore($boost,$max_boost,$boost_mode,$min_score,$score_mode);
     }
 }

@@ -20,13 +20,13 @@ class Aggregation
 {
 
     /**
-     * @param $namespace
-     * @param $field
+     * @param string $namespace
+     * @param string $field
      * @param int $size
-     * @param array $order
+     * @param array|null $order
      * @return array
      */
-    public function terms($namespace,$field,$size=10,$order=null)
+    public function terms(string $namespace, string $field, int $size=10, array $order = null): array
     {
         $terms = [
             'field' => $field,
@@ -35,7 +35,7 @@ class Aggregation
 
         if(!empty($order))
         {
-            array_merge($terms,['order' => $order]);
+            $terms = array_merge($terms,['order' => $order]);
         }
 
         return [
@@ -46,11 +46,11 @@ class Aggregation
     }
 
     /**
-     * @param $namespace
-     * @param $field
+     * @param string $namespace
+     * @param string $field
      * @return array
      */
-    public function stats($namespace,$field)
+    public function stats(string $namespace, string $field): array
     {
         return [
             $namespace => [
@@ -62,11 +62,11 @@ class Aggregation
     }
 
     /**
-     * @param $namespace
-     * @param $field
+     * @param string $namespace
+     * @param string $field
      * @return array
      */
-    public function extended_stats($namespace,$field)
+    public function extended_stats(string $namespace, string $field): array
     {
         return [
             $namespace => [
@@ -78,11 +78,11 @@ class Aggregation
     }
 
     /**
-     * @param $namespace
-     * @param $field
+     * @param string $namespace
+     * @param string $field
      * @return array
      */
-    public function min($namespace,$field)
+    public function min(string $namespace, string $field): array
     {
         return [
             $namespace => [
@@ -94,11 +94,11 @@ class Aggregation
     }
 
     /**
-     * @param $namespace
-     * @param $field
+     * @param string $namespace
+     * @param string $field
      * @return array
      */
-    public function max($namespace,$field)
+    public function max(string $namespace, string $field): array
     {
         return [
             $namespace => [
@@ -110,11 +110,11 @@ class Aggregation
     }
 
     /**
-     * @param $namespace
-     * @param $field
+     * @param string $namespace
+     * @param string $field
      * @return array
      */
-    public function avg($namespace,$field)
+    public function avg(string $namespace, string $field): array
     {
         return [
             $namespace => [
@@ -126,11 +126,11 @@ class Aggregation
     }
 
     /**
-     * @param $namespace
-     * @param $field
+     * @param string $namespace
+     * @param string $field
      * @return array
      */
-    public function cardinality($namespace,$field)
+    public function cardinality(string $namespace, string $field): array
     {
         return [
             $namespace => [
@@ -142,11 +142,11 @@ class Aggregation
     }
 
     /**
-     * @param $namespace
-     * @param $field
+     * @param string $namespace
+     * @param string $field
      * @return array
      */
-    public function sum($namespace,$field)
+    public function sum(string $namespace, string $field): array
     {
         return [
             $namespace => [
@@ -158,11 +158,11 @@ class Aggregation
     }
 
     /**
-     * @param $namespace
-     * @param $field
+     * @param string $namespace
+     * @param string $field
      * @return array
      */
-    public function value_count($namespace,$field)
+    public function value_count(string $namespace, string $field): array
     {
         return [
             $namespace => [
@@ -174,12 +174,12 @@ class Aggregation
     }
 
     /**
-     * @param $namespace
-     * @param $field
+     * @param string $namespace
+     * @param string $field
      * @param bool $wrap_lon
      * @return array
      */
-    public function geo_bounds($namespace,$field,$wrap_lon=true)
+    public function geo_bounds(string $namespace, string $field, bool $wrap_lon = true): array
     {
         return [
             $namespace => [
@@ -192,11 +192,12 @@ class Aggregation
     }
 
     /**
-     * @param $namespace
-     * @param $filter
+     * @param string $namespace
+     * @param array $filter
+     * @param array $aggs
      * @return array
      */
-    public function filter($namespace,$filter,$aggs)
+    public function filter(string $namespace,array $filter, array $aggs): array
     {
         return [
             $namespace => [
@@ -207,11 +208,11 @@ class Aggregation
     }
 
     /**
-     * @param $namespace
-     * @param $filters
+     * @param string $namespace
+     * @param array $filters
      * @return array
      */
-    public function filters($namespace,$filters)
+    public function filters(string $namespace, array $filters): array
     {
         return [
             $namespace => [
@@ -223,12 +224,12 @@ class Aggregation
     }
 
     /**
-     * @param $namespace
-     * @param $field
-     * @param $ranges
+     * @param string $namespace
+     * @param string $field
+     * @param array $ranges
      * @return array
      */
-    public function range($namespace,$field,$ranges)
+    public function range(string $namespace, string $field, array $ranges): array
     {
         return [
             $namespace => [
@@ -241,11 +242,11 @@ class Aggregation
     }
 
     /**
-     * @param $namespace
-     * @param $type
+     * @param string $namespace
+     * @param string $type
      * @return array
      */
-    public function children($namespace,$type)
+    public function children(string $namespace, string $type): array
     {
         return [
             $namespace => [
@@ -257,15 +258,22 @@ class Aggregation
     }
 
     /**
-     * @param $namespace
-     * @param $field
-     * @param $interval
-     * @param string $format
-     * @param string $timezone
-     * @param string $offset
+     * @param string $namespace
+     * @param string $field
+     * @param string $interval
+     * @param string|null $format
+     * @param string|null $timezone
+     * @param string|null $offset
      * @return array
      */
-    public function date_histogram($namespace,$field,$interval,$format=null,$timezone=null,$offset=null)
+    public function date_histogram(
+        string $namespace,
+        string $field,
+        string $interval,
+        string|null $format=null,
+        string|null $timezone=null,
+        string|null $offset=null
+    ): array
     {
         return [
             $namespace => [
@@ -281,56 +289,72 @@ class Aggregation
     }
 
     /**
-     * @param $namespace
-     * @param $field
-     * @param $ranges
-     * @param string $format
+     * @param string $namespace
+     * @param string $field
+     * @param array $ranges
+     * @param string|null $format
+     * @param string|null $missing
      * @return array
      */
-    public function date_range($namespace,$field,$ranges,$format=null)
+    public function date_range(string $namespace, string $field, array $ranges, string $format = null, string $missing = null): array
     {
-        return [
+        $date_range = [
             $namespace => [
                 'date_range' => array_filter([
                     'field' => $field,
-                    'format' => $format,
                     'ranges' => $ranges
                 ])
             ]
         ];
+
+        if(!empty($format)){
+            $date_range[$namespace]['date_range']['format'] = $format;
+        }
+
+        if(!empty($missing)){
+            $date_range[$namespace]['date_range']['missing'] = $missing;
+        }
+
+        return $date_range;
     }
 
     /**
-     * @param $namespace
-     * @param $field
-     * @param $origin
-     * @param $ranges
-     * @param string $unit
+     * @param string $namespace
+     * @param string $field
+     * @param string $origin
+     * @param array $ranges
+     * @param string|null $unit
      * @return array
      */
-    public function geo_distance($namespace,$field,$origin,$ranges,$unit=null)
+    public function geo_distance(string $namespace, string $field, string $origin, array $ranges, string $unit=null): array
     {
-        return [
+
+        $geo_distance =  [
             $namespace => [
                 'geo_distance' => array_filter([
                     'field' => $field,
                     'origin' => $origin,
-                    'unit' => $unit,
                     'ranges' => $ranges
                 ])
             ]
         ];
+
+        if(!empty($unit)){
+            $geo_distance[$namespace]['geo_distance']['unit'] = $unit;
+        }
+
+        return $geo_distance;
     }
 
     /**
-     * @param $namespace
-     * @param $field
+     * @param string $namespace
+     * @param string $field
      * @param int $percision
      * @param int $size
      * @param int $shard_size
      * @return array
      */
-    public function geohash_grid($namespace,$field,$percision=2,$size=10000,$shard_size=0)
+    public function geohash_grid(string $namespace, string $field, int $percision = 2, int $size = 10000, int $shard_size = 0): array
     {
         return [
             $namespace => [
@@ -345,11 +369,14 @@ class Aggregation
     }
 
     /**
-     * @param $namespace
-     * @param $aggs
+     * note: this is the global aggregation ... but can't use global as a function name (hence: "all")
+     *
+     *
+     * @param string $namespace
+     * @param array $aggs
      * @return array
      */
-    public function all($namespace,$aggs) //global aggregation ... but can't use global as a function name
+    public function all(string $namespace, array $aggs): array
     {
         return [
             $namespace => [
@@ -360,39 +387,51 @@ class Aggregation
     }
 
     /**
-     * @param $namespace
-     * @param $field
-     * @param $interval
-     * @param null $minimum_doc_count
+     * @param string $namespace
+     * @param string $field
+     * @param int $interval
      * @param array $order
      * @param int $offset
-     * @param null $keyed
-     * @param null $missing
+     * @param bool|null $keyed
+     * @param int|string|null $missing
+     * @param int|null $minimum_doc_count
      * @return array
      */
-    public function histogram($namespace,$field,$interval,$order=['_key'=>'asc'],$offset=0,$keyed=null,$missing=null)
+    public function histogram(string $namespace, string $field, int $interval, array $order = ['_key' => 'asc'], int $offset = 0, bool|null $keyed = null, int|string $missing = null, int $minimum_doc_count = null): array
     {
 
-        return [
+        $histogram = [
             $namespace => [
                 'histogram' => array_filter([
                     'field' => $field,
                     'interval' => $interval,
                     'order' => $order,
-                    'offset' => $offset,
-                    'keyed' => $keyed,
-                    'missing' => $missing
+                    'offset' => $offset
                 ])
             ]
         ];
+
+        if(!empty($keyed)){
+            $histogram[$namespace]['histogram']['keyed'] = $keyed;
+        }
+
+        if(!empty($minimum_doc_count)){
+            $histogram[$namespace]['histogram']['min_doc_count'] = $minimum_doc_count;
+        }
+
+        if(!empty($minimum_doc_count)){
+            $histogram[$namespace]['histogram']['missing'] = $missing;
+        }
+
+        return $histogram;
     }
 
     /**
-     * @param $namespace
-     * @param $field
+     * @param string $namespace
+     * @param string $field
      * @return array
      */
-    public function missing($namespace,$field)
+    public function missing(string $namespace, string $field): array
     {
         return [
             $namespace => [
@@ -404,12 +443,12 @@ class Aggregation
     }
 
     /**
-     * @param $namespace
-     * @param $path
-     * @param $aggs
+     * @param string $namespace
+     * @param string $path
+     * @param array $aggs
      * @return array
      */
-    public function nested($namespace,$path,$aggs)
+    public function nested(string $namespace,string $path, array $aggs): array
     {
         return [
             $namespace => [
@@ -422,11 +461,11 @@ class Aggregation
     }
 
     /**
-     * @param $namespace
-     * @param $field
+     * @param string $namespace
+     * @param string $field
      * @return array
      */
-   public function significant_terms($namespace,$field)
+   public function significant_terms(string $namespace, string $field): array
    {
        return [
            $namespace => [
@@ -438,11 +477,11 @@ class Aggregation
    }
    
    /**
-     * @param $namespace
-     * @param $field
+     * @param string $namespace
+     * @param string $field
      * @return array
      */
-   public function significant_text($namespace,$field)
+   public function significant_text(string $namespace, string $field): array
    {
        return [
            $namespace => [
@@ -457,9 +496,10 @@ class Aggregation
      * @param string $namespace the aggregation's output namespace
      * @param array $values_source the sources of the values
      * @param int $size maximum number of composite buckets to be returned
-     * @return \array[][]
+     * @return array[][]
      */
-   public function composite($namespace, $values_source, $size = 10){
+   public function composite(string $namespace, array $values_source, int $size = 10): array
+   {
 
        return [
            $namespace => [
