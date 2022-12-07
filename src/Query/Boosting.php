@@ -18,26 +18,26 @@ class Boosting
      * Boosting constructor.
      * @param int $negative_boost
      */
-    public function __construct($negative_boost=1)
+    public function __construct(int $negative_boost = 1)
     {
         $this->query = ['boosting'=>['negative_boost'=>$negative_boost]];
     }
 
     /**
-     * @param $query
+     * @param array $query
      * @return $this
      */
-    public function positive($query)
+    public function positive(array $query): Boosting
     {
         $this->query['boosting']['positive'] = array_merge_recursive(($this->query['boosting']['positive'] ?? []), $query);
         return $this;
     }
 
     /**
-     * @param $query
+     * @param array $query
      * @return $this
      */
-    public function negative($query)
+    public function negative(array $query): Boosting
     {
         $this->query['boosting']['negative'] = array_merge_recursive(($this->query['boosting']['negative'] ?? []), $query);
         return $this;

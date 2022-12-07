@@ -22,7 +22,7 @@ class Boolean extends Query
      * @param int $boost
      * @param int $minimum_should_match
      */
-    public function __construct($boost=1,$minimum_should_match=1)
+    public function __construct( int $boost=1, int $minimum_should_match=1)
     {
         $this->query = ['bool'=>['boost'=>$boost,'minimum_should_match'=>$minimum_should_match]];
     }

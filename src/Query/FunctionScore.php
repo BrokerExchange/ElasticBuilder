@@ -17,13 +17,13 @@ class FunctionScore extends Query
     /**
      * FunctionScore constructor.
      *
-     * @param int|float|null $boost boost for the given query
-     * @param int|float|null $max_boost the maximum boost allowed to be applied
+     * @param float|int|null $boost boost for the given query
+     * @param float|int|null $max_boost the maximum boost allowed to be applied
      * @param string $boost_mode how the function_score score is combined with the query score
-     * @param int|float|null $min_score the minimum score threshold for a document to count as a result
+     * @param float|int|null $min_score the minimum score threshold for a document to count as a result
      * @param string $score_mode how the function_score score is computed
      */
-    public function __construct($boost=null,$max_boost=null,$boost_mode='multiply',$min_score=null,$score_mode='multiply')
+    public function __construct(float|int|null $boost = null,float|int|null $max_boost = null, string $boost_mode='multiply', float|int|null $min_score = null, string $score_mode = 'multiply')
     {
         $this->query = [
             'function_score'=>[],
@@ -54,19 +54,20 @@ class FunctionScore extends Query
      * @param array $query
      * @return $this
      */
-    public function query($query=[]){
+    public function query(array $query = []): FunctionScore
+    {
         $this->query['function_score']['query'] = $query;
         return $this;
     }
 
     /**
      * @param array $filter the function filter which are used to score
-     * @param int|float|null $weight the score applied to this function
+     * @param float|int|null $weight the score applied to this function
      * @param string $score_function_name the name of the scoring function used for this filter (when applicable)
      * @param array $score_function_body the body of the scoring function used for this filter (when applicable)
      * @return $this
      */
-    public function functions_filter($filter,$weight=null,$score_function_name='',$score_function_body=[])
+    public function functions_filter(array $filter, float|int|null $weight = null, string $score_function_name = '', array $score_function_body = [])
     {
         $new_filter = ['filter' => $filter];
 
@@ -92,12 +93,12 @@ class FunctionScore extends Query
      * @param mixed $origin note: Required (by Elasticsearch) for Geo and Numeric Field Types
      * @param string $offset if set, the decay function will only begin computing decay functions with distances greater than the offset
      * @param string $decay how documents are scored at the distance provided via scale
-     * @param int|float|null $weight the score applied to this function
+     * @param float|int|null $weight the score applied to this function
      * @param string $multiValueMode if more than one origin is given, this value is used to determine the distance ('min'|'max'|'avg'|'sum')
      * @param array $filters additional criteria to filter the decay function by
      * @return FunctionScore
      */
-    private function functions_decay($decayFunction, $field, $scale, $origin = '', $offset = '', $decay = '', $weight = null, $multiValueMode = 'min', $filters = [])
+    private function functions_decay(string $decayFunction, string $field, string $scale, string $origin = '', string $offset = '', string $decay = '',  float|int|null $weight = null, string $multiValueMode = 'min', array $filters = []): FunctionScore
     {
         $new_decay = [
             $decayFunction => [
@@ -138,12 +139,12 @@ class FunctionScore extends Query
      * @param mixed $origin note: Required (by Elasticsearch) for Geo and Numeric Field Types
      * @param string $offset if set, the decay function will only begin computing decay functions with distances greater than the offset
      * @param string $decay how documents are scored at the distance provided via scale
-     * @param int|float|null $weight the score applied to this function
+     * @param float|int|null $weight the score applied to this function
      * @param string $multiValueMode if more than one origin is given, this value is used to determine the distance ('min'|'max'|'avg'|'sum')
      * @param array $filters additional criteria to filter the gaussian decay function by
      * @return FunctionScore
      */
-    public function gauss($field,$scale,$origin = '',$offset = '0',$decay = '0.5', $weight = null, $multiValueMode = 'min', $filters = [])
+    public function gauss(string $field, string $scale, mixed $origin = '', string $offset = '0', string $decay = '0.5', float|int|null $weight = null, string $multiValueMode = 'min', array $filters = [])
     {
 
         return $this->functions_decay('gauss', $field, $scale, $origin, $offset, $decay, $weight, $multiValueMode, $filters);
@@ -158,12 +159,12 @@ class FunctionScore extends Query
      * @param mixed $origin note: Required (by Elasticsearch) for Geo and Numeric Field Types
      * @param string $offset if set, the decay function will only begin computing decay functions with distances greater than the offset
      * @param string $decay how documents are scored at the distance provided via scale
-     * @param int|float|null $weight the score applied to this function
+     * @param float|int|null $weight the score applied to this function
      * @param string $multiValueMode if more than one origin is given, this value is used to determine the distance ('min'|'max'|'avg'|'sum')
      * @param array $filters additional criteria to filter the exponential decay function by
      * @return FunctionScore
      */
-    public function exp($field,$scale,$origin = '',$offset = '0',$decay = '0.5', $weight = null, $multiValueMode = 'min', $filters = [])
+    public function exp(string $field, string $scale, mixed $origin = '', string $offset = '0', string $decay = '0.5', float|int|null $weight = null, string $multiValueMode = 'min', array $filters = []): FunctionScore
     {
 
         return $this->functions_decay('exp', $field, $scale, $origin, $offset, $decay, $weight, $multiValueMode, $filters);
@@ -178,12 +179,12 @@ class FunctionScore extends Query
      * @param mixed $origin note: Required (by Elasticsearch) for Geo and Numeric Field Types
      * @param string $offset if set, the decay function will only begin computing decay functions with distances greater than the offset
      * @param string $decay how documents are scored at the distance provided via scale
-     * @param int|float|null $weight the score applied to this function
+     * @param float|int|null $weight the score applied to this function
      * @param string $multiValueMode if more than one origin is given, this value is used to determine the distance ('min'|'max'|'avg'|'sum')
      * @param array $filters additional criteria to filter the linear decay function by
      * @return FunctionScore
      */
-    public function linear($field,$scale,$origin = '',$offset = '0',$decay = '0.5', $weight = null, $multiValueMode = 'min', $filters = [])
+    public function linear(string $field, string $scale, mixed $origin = '', string $offset = '0', string $decay = '0.5', float|int|null $weight = null, string $multiValueMode = 'min', array $filters = []): FunctionScore
     {
 
         return $this->functions_decay('linear', $field, $scale, $origin, $offset, $decay, $weight, $multiValueMode, $filters);

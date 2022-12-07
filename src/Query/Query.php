@@ -19,62 +19,62 @@ abstract class Query
     /**
      * @var array aggregations to execute along with the query
      */
-    protected $aggregations = [];
+    protected array $aggregations = [];
 
     /**
      * @var array sorts to be passed along with the query
      */
-    protected $sorts = [];
+    protected array $sorts = [];
 
     /**
      * @var array the full query ... it's a bool
      */
-    protected $query;
+    protected array $query;
 
     /**
      * @var
      */
-    protected $model;
+    protected mixed $model;
 
     /**
-     * @return mixed
+     * @return array
      */
-    public function get()
+    public function get(): array
     {
         return $this->query;
     }
     
     /**
-     * @return mixed
+     * @return array
      */
-    public function aggregations()
+    public function aggregations(): array
     {
         return $this->aggregations;
     }
     
     /**
-     * @return mixed
+     * @return array
      */
-    public function sorts()
+    public function sorts(): array
     {
         return $this->sorts;
     }
 
     /**
-     * @param $agg
+     * @param array $agg
      * @return $this
      */
-    public function aggregate(Array $agg)
+    public function aggregate(array $agg): Query
     {
         $this->aggregations = array_merge($this->aggregations,$agg);
         return $this;
     }
 
     /**
-     * @param $sort
+     * @param array $sort
      * @return $this
      */
-    public function sort(Array $sort)
+    public function sort(array $sort): Query
     {
         $this->sorts = array_merge($this->sorts,$sort);
         return $this;
@@ -83,7 +83,7 @@ abstract class Query
     /**
      * @return string
      */
-    public function toJson()
+    public function toJson(): string
     {
         return json_encode($this->get());
     }

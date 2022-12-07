@@ -18,13 +18,13 @@ class Sort
 {
 
     /**
-     * @param $field the field to sort on
+     * @param string $field the field to sort on
      * @param string $order the order of results -- asc (ascending) or desc (descending)
      * @param string $mode when sorting by array values, determinant of which array value is chosen when sorting the respective document (min, max, sum, avg, median)
      * @param string $missing_values what to do with docs which are missing the respective sort field (_last, _first, or a custom value to be used by missing docs as their sort value)
      * @param string $unmapped_type what sort values to emit if the respective field is not mapped
      */
-    public function byField($field, $order = 'asc', $mode = '', $missing = '', $unmapped_type = '')
+    public function byField(string $field, string $order = 'asc', string $mode = '', string $missing = '', string $unmapped_type = ''): array
     {
         $sort = [
             $field => [
@@ -52,22 +52,22 @@ class Sort
      * @param string $order the order of results -- asc (ascending) or desc (descending)
      * @return array
      */
-    public function byScore( $order = 'desc' )
+    public function byScore( string $order = 'desc' ): array
     {
         return $this->byField('_score', $order);
     }
 
     /**
      * @param string $field the name of the property-field with the location data
-     * @param $origin the point of origin to begin calculation distance
+     * @param array $origin the point of origin to begin calculation distance
      * @param string $unit the unit of measure to determine distance by (ex: mi, km, m)
      * @param string $order the order of results -- asc (ascending) or desc (descending)
      * @param string $distance_type how to measure the distance (arc or plane)
      * @param string $mode how to handle a field with multiple geo points
-     * @param boolean $ignore_unmapped should the unmapped field be treated as a missing value?
+     * @param bool $ignore_unmapped should the unmapped field be treated as a missing value?
      * @param string $origin_format how to build the field data in the request (ex: array,geohash,multiple_reference_points,properties,string)
      */
-    public function byGeoDistance($field, $origin, $unit = 'm', $order = 'asc', $mode = 'min', $distance_type = 'arc', $ignore_unmapped = false, $origin_format = 'array')
+    public function byGeoDistance(string $field, array $origin, string $unit = 'm', string $order = 'asc', string $mode = 'min', string $distance_type = 'arc', bool $ignore_unmapped = false, string $origin_format = 'array'): array
     {
         //options which are handled by "byField" (a.k.a. not unique to _geo_distance sorting)
 
