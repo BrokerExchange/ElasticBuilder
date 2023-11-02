@@ -208,7 +208,15 @@ class ElasticBuilder
      * @param int|null $fuzziness
      * @return array
      */
-    public function match(string $field,string $query,$operator='or', int|null $minimum=null, float|int|null $boost=null, string $analyzer='', int|null $fuzziness=null): array
+    public function match(
+        string $field,
+        string $query,
+        string $operator='or', 
+        int|null $minimum=null, 
+        float|int|null $boost=null, 
+        string $analyzer='', 
+        int|null $fuzziness=null
+    ): array
     {
 
         $params = [
@@ -247,7 +255,7 @@ class ElasticBuilder
         int|null $minimum = null,
         float|int|null $boost = null,
         string $analyzer = '',
-        int $fuzziness = null
+        int|string|null $fuzziness = null
     ): array
     {
 
@@ -277,7 +285,13 @@ class ElasticBuilder
      * @param int|null $fuzziness
      * @return array
      */
-    public function match_phrase_prefix(string $field, string $query, float|int|null $boost = null, string $analyzer = '', int $fuzziness = null): array
+    public function match_phrase_prefix(
+        string $field, 
+        string $query, 
+        float|int|null $boost = null, 
+        string $analyzer = '', 
+        int|string|null $fuzziness = null
+    ): array
     {
         $params = [
             'match_phrase_prefix' => [
@@ -313,7 +327,15 @@ class ElasticBuilder
      * @param string $analyzer
      * @return array
      */
-    public function common(string $field, string $value, float|int $boost = 1, float $cuttoff = .1, string $low_freq_operator='or', string $high_freq_operator='or', string $analyzer='standard'): array
+    public function common(
+        string $field, 
+        string $value, 
+        float|int $boost = 1, 
+        float $cuttoff = .1, 
+        string $low_freq_operator='or', 
+        string $high_freq_operator='or', 
+        string $analyzer='standard'
+    ): array
     {
         return [
             'common' => [
@@ -382,7 +404,14 @@ class ElasticBuilder
      * @param int $max_exp
      * @return array
      */
-    public function fuzzy(string $field, string $value, float|int $boost = 1, string $fuzziness='AUTO', int $prefix_length=0, int $max_exp=50): array
+    public function fuzzy(
+        string $field, 
+        string $value, 
+        float|int $boost = 1, 
+        int|string $fuzziness='AUTO', 
+        int $prefix_length=0, 
+        int $max_exp=50
+    ): array
     {
         return [
             'fuzzy' => [
