@@ -212,7 +212,7 @@ class ElasticBuilder
         string $field,
         string $query,
         string $operator='or', 
-        int|null $minimum=null, 
+        int|string|null $minimum=null, 
         float|int|null $boost=null, 
         string $analyzer='', 
         int|null $fuzziness=null
@@ -252,7 +252,7 @@ class ElasticBuilder
         string $query = '',
         string $operator = 'or',
         string $type = null,
-        int|null $minimum = null,
+        int|string|null $minimum = null,
         float|int|null $boost = null,
         string $analyzer = '',
         int|string|null $fuzziness = null
