@@ -137,11 +137,11 @@ class ElasticBuilder
 
     /**
      * @param string $field
-     * @param string $value
+     * @param bool|string $value
      * @param float|int|null $boost
      * @return array
      */
-    public function term(string $field, string $value, float|int|null $boost = null): array
+    public function term(string $field, bool|string $value, float|int|null $boost = null): array
     {
         if(!is_null($boost))
         {
